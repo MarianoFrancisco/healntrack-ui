@@ -1,3 +1,4 @@
+import { Button } from "~/components/ui/button";
 import logoDark from "./logo-dark.svg";
 import logoLight from "./logo-light.svg";
 
@@ -25,6 +26,9 @@ export function Welcome() {
               What&apos;s next?
             </p>
             <ul>
+              <Button className="w-full">
+                Get Started
+              </Button>
               {resources.map(({ href, text, icon }) => (
                 <li key={href}>
                   <a
