@@ -23,6 +23,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "~/components/ui/sidebar"
+import { Link } from "react-router"
 
 const data = {
   user: {
@@ -123,15 +124,20 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="#">
-                <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-                  <Command className="size-4" />
+              <Link to="/" className="flex items-center gap-3">
+                <div className="flex items-center justify-center">
+                  <img
+                    src="/logo.svg"
+                    alt="Heal n Track Logo"
+                    className="h-10 w-10 rounded-lg object-contain"
+                  />
                 </div>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">Acme Inc</span>
-                  <span className="truncate text-xs">Enterprise</span>
+                <div className="grid flex-1 text-left leading-tight">
+                  <span className="truncate text-base font-semibold">Heal n Track</span>
+                  <span className="truncate text-sm text-muted-foreground">Hospital</span>
                 </div>
-              </a>
+              </Link>
+
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
