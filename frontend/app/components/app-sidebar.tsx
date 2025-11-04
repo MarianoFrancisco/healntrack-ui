@@ -3,19 +3,15 @@
 import * as React from "react"
 import {
   BookOpen,
-  Bot,
+  BriefcaseBusiness,
   Command,
-  Frame,
   LifeBuoy,
-  Map,
-  PieChart,
-  Send,
+  Pill,
   Settings2,
-  SquareTerminal,
+  TreePalm,
 } from "lucide-react"
 
 import { NavMain } from "~/components/nav-main"
-import { NavProjects } from "~/components/nav-projects"
 import { NavSecondary } from "~/components/nav-secondary"
 import { NavUser } from "~/components/nav-user"
 import {
@@ -30,54 +26,62 @@ import {
 
 const data = {
   user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
+    name: "sapo",
+    email: "sapo@healntrack.com",
+    avatar: "https://picsum.photos/400/400",
   },
   navMain: [
     {
-      title: "Playground",
-      url: "#",
-      icon: SquareTerminal,
+      title: "Empleados",
+      url: "/employees",
+      icon: BriefcaseBusiness,
       isActive: true,
       items: [
         {
-          title: "History",
-          url: "#",
+          title: "Listado",
+          url: "/employees",
         },
         {
-          title: "Starred",
-          url: "#",
+          title: "Contratar",
+          url: "/employees/hire",
         },
         {
-          title: "Settings",
-          url: "#",
+          title: "Historial laboral",
+          url: "/employees/history",
         },
+        {
+          title: "Pago de nómina",
+          url: "/employees/payroll/create",
+        },
+        {
+          title: "Historial de pagos",
+          url: "/employees/payroll/history",
+        }
       ],
     },
     {
-      title: "Models",
-      url: "#",
-      icon: Bot,
+      title: "Vacaciones",
+      url: "/employees/vacations",
+      icon: TreePalm,
       items: [
         {
-          title: "Genesis",
-          url: "#",
+          title: "Nueva solicitud",
+          url: "/employees/vacations/create",
         },
         {
-          title: "Explorer",
-          url: "#",
+          title: "Listado de solicitudes",
+          url: "/employees/vacations",
         },
         {
-          title: "Quantum",
-          url: "#",
+          title: "Configuración",
+          url: "/employees/conf",
         },
       ],
     },
     {
-      title: "Documentation",
+      title: "Farmacia",
       url: "#",
-      icon: BookOpen,
+      icon: Pill,
       items: [
         {
           title: "Introduction",
@@ -96,58 +100,18 @@ const data = {
           url: "#",
         },
       ],
-    },
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings2,
-      items: [
-        {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
-        },
-      ],
-    },
+    }
   ],
   navSecondary: [
     {
-      title: "Support",
+      title: "Acerca de",
       url: "#",
       icon: LifeBuoy,
     },
     {
-      title: "Feedback",
+      title: "Documentación",
       url: "#",
-      icon: Send,
-    },
-  ],
-  projects: [
-    {
-      name: "Design Engineering",
-      url: "#",
-      icon: Frame,
-    },
-    {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: PieChart,
-    },
-    {
-      name: "Travel",
-      url: "#",
-      icon: Map,
+      icon: BookOpen,
     },
   ],
 }
@@ -174,7 +138,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>

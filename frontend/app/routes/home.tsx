@@ -8,6 +8,10 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
+export const handle = {
+  crumb: "Inicio"
+};
+
 export default function Home() {
-  return <Welcome />;
+  return <div>Inicio</div>;
 }
