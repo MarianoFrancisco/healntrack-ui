@@ -4,10 +4,8 @@ import * as React from "react"
 import {
   BookOpen,
   BriefcaseBusiness,
-  Command,
-  LifeBuoy,
+  Info,
   Pill,
-  Settings2,
   TreePalm,
 } from "lucide-react"
 
@@ -106,8 +104,8 @@ const data = {
   navSecondary: [
     {
       title: "Acerca de",
-      url: "#",
-      icon: LifeBuoy,
+      url: "/about",
+      icon: Info,
     },
     {
       title: "Documentación",
