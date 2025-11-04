@@ -1,6 +1,6 @@
 // components/breadcrumbs.tsx
 import { Link, useMatches, type UIMatch } from "react-router";
-import type { BreadcrumbHandle } from "types/breadcrumb";
+import type { BreadcrumbHandle } from "~/types/breadcrumb";
 import {
     Breadcrumb,
     BreadcrumbItem,

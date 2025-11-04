@@ -7,6 +7,7 @@ import {
   Info,
   Pill,
   TreePalm,
+  Users,
 } from "lucide-react"
 
 import { NavMain } from "~/components/nav-main"
@@ -30,6 +31,22 @@ const data = {
     avatar: "https://picsum.photos/400/400",
   },
   navMain: [
+    {
+      title: "Areas del hospital",
+      url: "/departments",
+      icon: Users,
+      isActive: true,
+      items: [
+        {
+          title: "Listado",
+          url: "/departments",
+        },
+        {
+          title: "Crear Area",
+          url: "/departments/create",
+        }
+      ],
+    },
     {
       title: "Empleados",
       url: "/employees",

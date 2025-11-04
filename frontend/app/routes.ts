@@ -10,5 +10,12 @@ export default [
             route("create", "routes/employees/create.tsx"),
             route("edit", "routes/employees/edit.tsx"),
         ]),
+
+        ...prefix("departments", [
+            index("routes/departments/index.tsx"),
+            route("create", "routes/departments/create.tsx"),
+            route("update", "routes/departments/update.tsx"),
+            route("delete", "routes/departments/deactivate.tsx")
+        ])
     ]),
 ] satisfies RouteConfig;
