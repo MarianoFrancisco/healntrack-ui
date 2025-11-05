@@ -26,14 +26,14 @@ jobs:
             echo "VITE_API_TIMEOUT=${{ secrets.VITE_API_TIMEOUT }}" >> $GITHUB_ENV
           fi
 
-      - name: Write SSH key for QA
+      - name: Write SSH key - QA
         if: github.ref_name != 'main'
         run: |
           mkdir -p ~/.ssh
           printf '%s' '${{ secrets.EC2_SSH_KEY }}' > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
 
-      - name: Write SSH key for PROD
+      - name: Write SSH key - PROD
         if: github.ref_name == 'main'
         run: |
           mkdir -p ~/.ssh
