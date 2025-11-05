@@ -3,6 +3,12 @@ COPY . /app
 WORKDIR /app
 RUN npm ci
 
+ARG VITE_API_BASE_URL
+ARG VITE_API_TIMEOUT
+
+ENV VITE_API_BASE_URL=$VITE_API_BASE_URL
+ENV VITE_API_TIMEOUT=$VITE_API_TIMEOUT
+
 FROM node:20-alpine AS production-dependencies-env
 COPY ./package.json package-lock.json /app/
 WORKDIR /app
