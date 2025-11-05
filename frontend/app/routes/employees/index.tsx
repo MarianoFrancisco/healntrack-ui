@@ -1,15 +1,65 @@
+import { Link, useFetcher, useLoaderData } from "react-router";
 import type { Route } from "../+types/home";
+import { EmployeeTable } from "~/components/employees/employee-table";
+import { Button } from "~/components/ui/button";
+import type { EmployeeResponseDTO, UpdateEmployeeRequestDTO } from "~/types/employee";
+import { employeeService } from "~/services/employment-service";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "Employees" },
-    { name: "description", content: "Bienvenido a la página de empleados" },
+    { title: "Empleados" },
+    { name: "description", content: "Listado y gestión de empleados" },
   ];
 }
+
 export const handle = {
-  crumb: "Empleados"
+  crumb: "Empleados",
 };
 
+export async function loader() {
+  try {
+    const employees = await employeeService.getAllEmployees();
+    return Response.json(employees);
+  } catch (error) {
+    console.error("Error al cargar empleados:", error);
+    return Response.json([], { status: 500 });
+  }
+}
+
 export default function EmployeesPage() {
-  return <div>Empleados Page</div>;
+  const employees = useLoaderData<typeof loader>() as EmployeeResponseDTO[];
+  const fetcher = useFetcher();
+
+  const handleEdit = async (cui: string, updated: UpdateEmployeeRequestDTO) => {
+    const formData = new FormData();
+    formData.append("fullname", updated.fullname ?? "");
+    formData.append("phoneNumber", updated.phoneNumber ?? "");
+    formData.append("igssPercent", String(updated.igssPercent ?? 0));
+    formData.append("irtraPercent", String(updated.irtraPercent ?? 0));
+
+    fetcher.submit(formData, {
+      method: "POST",
+      action: `/employees/${cui}/edit`,
+    });
+  };
+
+  return (
+    <section className="space-y-6">
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight">Empleados</h1>
+        <p className="text-muted-foreground">
+          Gestiona los empleados registrados en el sistema.
+        </p>
+      </div>
+
+      <div className="flex justify-between items-center">
+        <div className="flex-1" />
+        <Button asChild>
+          <Link to="/employees/hire">Contratar empleado</Link>
+        </Button>
+      </div>
+
+      <EmployeeTable data={employees} handleEdit={handleEdit} />
+    </section>
+  );
 }
