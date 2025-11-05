@@ -19,7 +19,7 @@ ENV NODE_ENV=production
 ENV PORT=3000
 ENV HOST=0.0.0.0
 COPY package*.json ./
-RUN npm install --omit=dev
+RUN npm install
 COPY --from=build /app/build /app/build
 EXPOSE 3000
-CMD ["node","build/server/index.js"]
+CMD ["npm", "run", "start"]
