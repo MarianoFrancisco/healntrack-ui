@@ -1,0 +1,64 @@
+name: healntrack-ui
+
+on:
+  push:
+    branches: [develop, main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set environment variables based on branch
+        run: |
+          if [ "${GITHUB_REF_NAME}" = "main" ]; then
+            echo "HOST=${{ secrets.EC2_HOST_PROD }}" >> $GITHUB_ENV
+            echo "SSH_USER=${{ secrets.EC2_USER_PROD }}" >> $GITHUB_ENV
+            echo "VITE_API_BASE_URL=${{ secrets.VITE_API_BASE_URL_PROD }}" >> $GITHUB_ENV
+            echo "VITE_API_TIMEOUT=${{ secrets.VITE_API_TIMEOUT_PROD }}" >> $GITHUB_ENV
+            echo "SSH_KEY=${{ secrets.EC2_SSH_KEY_PROD }}" >> $GITHUB_ENV
+          else
+            echo "HOST=${{ secrets.EC2_HOST }}" >> $GITHUB_ENV
+            echo "SSH_USER=${{ secrets.EC2_USER }}" >> $GITHUB_ENV
+            echo "VITE_API_BASE_URL=${{ secrets.VITE_API_BASE_URL }}" >> $GITHUB_ENV
+            echo "VITE_API_TIMEOUT=${{ secrets.VITE_API_TIMEOUT }}" >> $GITHUB_ENV
+            echo "SSH_KEY=${{ secrets.EC2_SSH_KEY }}" >> $GITHUB_ENV
+          fi
+
+      - name: Set up SSH
+        shell: bash
+        run: |
+          mkdir -p ~/.ssh
+          echo "${SSH_KEY}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts
+
+      - name: Deploy to EC2 via SSH
+        shell: bash
+        run: |
+          ssh "$SSH_USER@$HOST" << EOF
+            set -e
+
+            cd ./healntrack-ui || exit 1
+
+            git fetch --all --prune
+            git checkout "${GITHUB_REF_NAME}"
+            git pull
+
+            sudo docker build \
+              -f healntrack-ui/frontend/DockerFile \
+              --build-arg VITE_API_BASE_URL="${VITE_API_BASE_URL}" \
+              --build-arg VITE_API_TIMEOUT="${VITE_API_TIMEOUT}" \
+              -t healntrack-ui:latest \
+              .
+
+            sudo docker stop healntrack-ui || true
+            sudo docker rm healntrack-ui || true
+
+            sudo docker run -d --name healntrack-ui \
+              -p 80:80 \
+              healntrack-ui:latest
+          EOF
