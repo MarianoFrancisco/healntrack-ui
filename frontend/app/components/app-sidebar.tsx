@@ -6,6 +6,7 @@ import {
   BriefcaseBusiness,
   Info,
   Pill,
+  SquareUser,
   TreePalm,
   Users,
 } from "lucide-react"
@@ -103,6 +104,21 @@ const data = {
         {
           title: "Configuración",
           url: "/employees/conf",
+        },
+      ],
+    },
+        {
+      title: "Pacientes",
+      url: "/patients",
+      icon: SquareUser,
+      items: [
+        {
+          title: "Nuevo paciente",
+          url: "/patients/create",
+        },
+        {
+          title: "Listado de pacientes",
+          url: "/patients",
         },
       ],
     },
