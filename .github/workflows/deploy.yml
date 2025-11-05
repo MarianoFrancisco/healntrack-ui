@@ -63,7 +63,7 @@ jobs:
               --build-arg VITE_API_BASE_URL="${VITE_API_BASE_URL}" \
               --build-arg VITE_API_TIMEOUT="${VITE_API_TIMEOUT}" \
               -t healntrack-ui:latest \
-              .
+              frontend
 
             sudo docker stop healntrack-ui || true
             sudo docker rm healntrack-ui || true
