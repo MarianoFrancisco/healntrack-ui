@@ -3,6 +3,18 @@ import { DepartmentTable } from "~/components/departments/department-table";
 import { Button } from "~/components/ui/button";
 import { departmentService } from "~/services/department-service";
 import type { DepartmentResponseDTO } from "~/types/department";
+import type { Route } from "../+types/home";
+
+export function meta({}: Route.MetaArgs) {
+  return [
+    { title: "Areas" },
+    { name: "description", content: "Listado de areas" },
+  ];
+}
+
+export const handle = {
+  crumb: "Listado de areas"
+};
 
 export async function loader({ request }: { request: Request }) {
   console.log("Departments loader called with:", request.url);

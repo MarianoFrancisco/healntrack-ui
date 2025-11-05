@@ -23,7 +23,7 @@ export function DepartmentForm({ department }: DepartmentFormProps) {
   return (
     <div className="mx-auto max-w-xl space-y-6">
       <h2 className="text-2xl font-semibold tracking-tight">
-        {isEditMode ? "Editar Departamento" : "Crear Departamento"}
+        {isEditMode ? "Editar Area" : "Crear Area"}
       </h2>
 
       {actionData?.error && (

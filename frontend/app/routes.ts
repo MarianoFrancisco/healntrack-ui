@@ -7,7 +7,7 @@ export default [
 
         ...prefix("employees", [
             index("routes/employees/index.tsx"),
-            route("create", "routes/employees/create.tsx"),
+            route("hire", "routes/employees/hire.tsx"),
             route(":id/edit", "routes/employees/edit.tsx")
         ]),
 

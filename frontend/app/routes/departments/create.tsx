@@ -3,6 +3,18 @@ import type { CreateDepartmentRequest } from "~/types/department";
 import { ApiError } from "~/lib/api-client";
 import { departmentService } from "~/services/department-service";
 import { DepartmentForm } from "~/components/departments/department-form";
+import type { Route } from "../+types/home";
+
+export function meta({}: Route.MetaArgs) {
+  return [
+    { title: "Nueva area" },
+    { name: "description", content: "Crear area" },
+  ];
+}
+
+export const handle = {
+  crumb: "Crear area"
+};
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();

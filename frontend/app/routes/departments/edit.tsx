@@ -1,11 +1,21 @@
-// routes/departments/edit.tsx
 import { redirect, type ActionFunctionArgs, type LoaderFunctionArgs } from "react-router";
 import { DepartmentForm } from "~/components/departments/department-form";
 import type { DepartmentResponseDTO, UpdateDepartmentRequest } from "~/types/department";
 import { departmentService } from "~/services/department-service";
 import { ApiError } from "~/lib/api-client";
+import type { Route } from "../+types/home";
 
-// Loader para obtener la info del departamento
+export function meta({}: Route.MetaArgs) {
+  return [
+    { title: "Editar Area" },
+    { name: "description", content: "Editar area" },
+  ];
+}
+
+export const handle = {
+  crumb: "Editar area"
+};
+
 export async function loader({ params }: LoaderFunctionArgs) {
   if (!params.id) throw new Error("No se proporcionó el código del departamento");
 
