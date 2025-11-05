@@ -26,14 +26,14 @@ jobs:
             echo "VITE_API_TIMEOUT=${{ secrets.VITE_API_TIMEOUT }}" >> $GITHUB_ENV
           fi
 
-      - name: Write SSH key for QA
+      - name: Write SSH key - QA
         if: github.ref_name != 'main'
         run: |
           mkdir -p ~/.ssh
           printf '%s' '${{ secrets.EC2_SSH_KEY }}' > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
 
-      - name: Write SSH key for PROD
+      - name: Write SSH key - PROD
         if: github.ref_name == 'main'
         run: |
           mkdir -p ~/.ssh
@@ -62,6 +62,7 @@ jobs:
               -f frontend/Dockerfile \
               --build-arg VITE_API_BASE_URL="${VITE_API_BASE_URL}" \
               --build-arg VITE_API_TIMEOUT="${VITE_API_TIMEOUT}" \
+              --build-arg OUT_DIR=build \
               -t healntrack-ui:latest \
               frontend
 
@@ -69,6 +70,6 @@ jobs:
             sudo docker rm healntrack-ui || true
 
             sudo docker run -d --name healntrack-ui \
-              -p 80:80 \
+              -p 80:3000 \
               healntrack-ui:latest
           EOF
