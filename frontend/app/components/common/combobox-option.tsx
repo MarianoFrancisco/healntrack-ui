@@ -43,7 +43,7 @@ export function Combobox({ options, value, onChange, placeholder = "Select...", 
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0">
         <Command>
-          <CommandInput placeholder={`Buscar ${placeholder.toLowerCase()}...`} className="h-9" />
+          <CommandInput placeholder={`${placeholder.toLowerCase()}...`} className="h-9" />
           <CommandList>
             <CommandEmpty>No se encontraron opciones.</CommandEmpty>
             <CommandGroup>
