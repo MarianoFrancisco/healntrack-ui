@@ -16,6 +16,11 @@ export default [
             route("managers", "routes/employees/managers.tsx"),
         ]),
 
+        ...prefix("payrolls", [
+            index("routes/payrolls/index.tsx"),
+            route("create", "routes/payrolls/create.tsx"),
+        ]),
+
         ...prefix("departments", [
             index("routes/departments/index.tsx"),
             route("create", "routes/departments/create.tsx"),

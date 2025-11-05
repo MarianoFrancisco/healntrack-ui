@@ -69,15 +69,23 @@ const data = {
           title: "Historial laboral",
           url: "/employees/history",
         },
+      ],
+    },
+    {
+      title: "Nómina",
+      url: "/payrolls",
+      icon: BriefcaseBusiness,
+      isActive: true,
+      items: [
         {
-          title: "Pago de nómina",
-          url: "/employees/payroll/create",
+          title: "Pagar nómina",
+          url: "/payrolls/create",
         },
         {
           title: "Historial de pagos",
-          url: "/employees/payroll/history",
-        }
-      ],
+          url: "/payrolls",
+        },
+      ]
     },
     {
       title: "Vacaciones",
