@@ -94,7 +94,7 @@ async hireEmployee(request: HireEmployeeRequestDTO): Promise<EmployeeResponseDTO
 
   async terminateEmployment(cui: string, request: TerminateEmploymentRequestDTO): Promise<void> {
     try {
-      await apiClient.post(`${this.basePath}/${cui}/terminate`, { data: request });
+         await apiClient.post(`${this.basePath}/${cui}/terminate`, request);
     } catch (error) {
       return this.handleError(error);
     }

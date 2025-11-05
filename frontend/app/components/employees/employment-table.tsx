@@ -1,4 +1,4 @@
-import { ArrowUpDown, Calendar, User, Building2, Briefcase } from "lucide-react";
+import { ArrowUpDown, Calendar, User, Building2, Briefcase, Banknote } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
 import type { ColumnDef } from "@tanstack/react-table";
@@ -108,7 +108,8 @@ export function EmploymentTable({ data }: EmploymentTableProps) {
           }
           className="flex items-center gap-2 font-semibold"
         >
-          💰 Salario
+            <Banknote className="h-4 w-4" />
+          Salario
           <ArrowUpDown className="ml-1 h-4 w-4" />
         </Button>
       ),

@@ -5,6 +5,7 @@ import { DataTable } from "../common/data-table";
 import type { EmployeeResponseDTO } from "~/types/employee";
 import type { ColumnDef } from "@tanstack/react-table";
 import { EmployeeEditDialog } from "./employee-dialog";
+import { EmploymentActions } from "./employment-actions";
 
 interface EmployeeTableProps {
   data: EmployeeResponseDTO[];
@@ -60,7 +61,13 @@ export function EmployeeTable({ data, handleEdit }: EmployeeTableProps) {
           <ArrowUpDown className="ml-1 h-4 w-4" />
         </Button>
       ),
-      cell: (info) => `Q. ${Number(info.getValue()).toFixed(2)}`,
+      cell: ({ getValue }) => {
+        const salary = getValue() as number;
+        return salary.toLocaleString("es-GT", {
+          style: "currency",
+          currency: "GTQ",
+        });
+      },
     },
     {
       accessorKey: "isActive",
@@ -92,12 +99,12 @@ export function EmployeeTable({ data, handleEdit }: EmployeeTableProps) {
       header: "Acciones",
       cell: ({ row }) => {
         const employee = row.original;
-        return (
-          <EmployeeEditDialog
-            employee={employee}
-            onSave={handleEdit}
-          />
-        );
+    return (
+      <div className="flex items-center gap-2">
+        <EmployeeEditDialog employee={employee} onSave={handleEdit} />
+        <EmploymentActions cui={employee.cui} isActive={employee.isActive} />
+      </div>
+    );
       },
     },
   ];

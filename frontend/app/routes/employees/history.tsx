@@ -7,7 +7,14 @@ import type { Route } from "../+types/home";
 
 export async function loader({ request }: Route.LoaderArgs) {
   const url = new URL(request.url);
-  const params = Object.fromEntries(url.searchParams.entries());
+  const rawParams = Object.fromEntries(url.searchParams.entries());
+  const params: Record<string, string> = {};
+  for (const [key, value] of Object.entries(rawParams)) {
+    const trimmed = (value ?? "").trim();
+    if (trimmed !== "" && trimmed.toLowerCase() !== "all") {
+      params[key] = trimmed;
+    }
+  }
   const employments = await employeeService.getAllEmployments(params);
   return Response.json(employments);
 }
@@ -24,11 +31,11 @@ export default function EmployeeHistoryPage() {
         </p>
       </div>
 
-      {/* 🔍 Filtros */}
       <EmploymentHistoryFilter />
 
-      {/* 📊 Tabla */}
-      <EmploymentTable data={employments} />
+      <div className="overflow-x-auto">
+        <EmploymentTable data={employments} />
+      </div>
     </section>
   );
 }

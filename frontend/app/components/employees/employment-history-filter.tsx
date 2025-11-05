@@ -1,24 +1,39 @@
-import { Form, useSearchParams } from "react-router";
+import { Form, useNavigate, useSearchParams, useSubmit } from "react-router";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Button } from "~/components/ui/button";
 import { CalendarSearch } from "lucide-react";
 import { useState } from "react";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "~/components/ui/select";
 import { DatePicker } from "~/components/common/date-picker";
 
 export function EmploymentHistoryFilter() {
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
   const [startDateFrom, setStartDateFrom] = useState<Date | undefined>(
-    searchParams.get("startDateFrom") ? new Date(searchParams.get("startDateFrom")!) : undefined
+    searchParams.get("startDateFrom")
+      ? new Date(searchParams.get("startDateFrom")!)
+      : undefined
   );
   const [startDateTo, setStartDateTo] = useState<Date | undefined>(
-    searchParams.get("startDateTo") ? new Date(searchParams.get("startDateTo")!) : undefined
+    searchParams.get("startDateTo")
+      ? new Date(searchParams.get("startDateTo")!)
+      : undefined
   );
 
   return (
-    <Form method="get" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 p-4 border rounded-lg bg-card shadow-sm">
+    <Form
+      method="get"
+      // onSubmit={handleSubmit}
+      className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 p-4 border rounded-lg bg-card shadow-sm"
+    >
       {/* Empleado */}
       <div className="grid gap-1">
         <Label htmlFor="employee">Empleado</Label>
@@ -44,12 +59,12 @@ export function EmploymentHistoryFilter() {
       {/* Tipo */}
       <div className="grid gap-1">
         <Label htmlFor="type">Tipo de periodo</Label>
-        <Select name="type" defaultValue={searchParams.get("type") ?? ""}>
+        <Select name="type" defaultValue={searchParams.get("type") ?? "all"}>
           <SelectTrigger id="type">
             <SelectValue placeholder="Selecciona un tipo" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">Todos</SelectItem>
+            <SelectItem value="all">Todos</SelectItem>
             <SelectItem value="CONTRATACION">Contratación</SelectItem>
             <SelectItem value="RECONTRATACION">Recontratación</SelectItem>
             <SelectItem value="ASCENSO">Ascenso</SelectItem>
@@ -68,11 +83,12 @@ export function EmploymentHistoryFilter() {
           onChange={(date) => setStartDateFrom(date)}
           placeholder="Desde"
         />
-        {/* Campo hidden para enviar el valor al form */}
         <input
           type="hidden"
           name="startDateFrom"
-          value={startDateFrom ? startDateFrom.toISOString().split("T")[0] : ""}
+          value={
+            startDateFrom ? startDateFrom.toISOString().split("T")[0] : ""
+          }
         />
       </div>
 
@@ -100,7 +116,7 @@ export function EmploymentHistoryFilter() {
         <Button
           type="reset"
           variant="outline"
-          onClick={() => (window.location.href = "/employees/history")}
+          onClick={() => navigate("/employees/history")}
         >
           Limpiar
         </Button>
