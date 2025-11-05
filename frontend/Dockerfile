@@ -8,14 +8,17 @@ WORKDIR /app
 COPY --from=deps /app /app
 ARG VITE_API_BASE_URL
 ARG VITE_API_TIMEOUT
-ARG OUT_DIR=dist
+ARG OUT_DIR=build
 ENV VITE_API_BASE_URL=$VITE_API_BASE_URL
 ENV VITE_API_TIMEOUT=$VITE_API_TIMEOUT
 ENV OUT_DIR=$OUT_DIR
-RUN npm run build && \
-    if [ "$OUT_DIR" != "dist" ] && [ -d "/app/$OUT_DIR" ]; then mv "/app/$OUT_DIR" /app/dist; fi
+RUN npm run build
 
-FROM nginx:alpine
-COPY --from=build /app/dist /usr/share/nginx/html
-EXPOSE 80
-CMD ["nginx","-g","daemon off;"]
+FROM node:20-alpine
+WORKDIR /app
+ENV NODE_ENV=production
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev
+COPY --from=build /app/build /app/build
+EXPOSE 3000
+CMD ["node","build/server/index.js"]
