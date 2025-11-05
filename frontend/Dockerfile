@@ -1,7 +1,7 @@
 FROM node:20-alpine AS deps
 WORKDIR /app
 COPY . .
-RUN npm ci
+RUN npm install
 
 FROM node:20-alpine AS build
 WORKDIR /app
@@ -22,4 +22,3 @@ RUN npm install --omit=dev
 COPY --from=build /app/build /app/build
 EXPOSE 3000
 CMD ["node", "build/server/index.js"]
-
