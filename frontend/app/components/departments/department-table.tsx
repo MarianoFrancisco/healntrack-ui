@@ -4,6 +4,7 @@ import { Badge } from "~/components/ui/badge";
 import type { DepartmentResponseDTO } from "~/types/department";
 import type { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "../common/data-table";
+import { ConfirmDialog } from "../common/confirm-dialog";
 
 interface DepartmentTableProps {
   data: DepartmentResponseDTO[];
@@ -55,7 +56,17 @@ export function DepartmentTable({ data, handleEdit, handleDeactivate }: Departme
     },
     {
       accessorKey: "isActive",
-      header: "Estado",
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="flex items-center gap-2 font-semibold"
+        >
+          <Users className="h-4 w-4" />
+          Estado
+          <ArrowUpDown className="ml-1 h-4 w-4" />
+        </Button>
+      ),
       cell: (info) => {
         const value = info.getValue() as boolean;
         return (
@@ -84,13 +95,17 @@ export function DepartmentTable({ data, handleEdit, handleDeactivate }: Departme
           >
             <Edit className="h-4 w-4 mr-1" /> Editar
           </Button>
-          <Button
-            variant="destructive"
-            size="sm"
-            onClick={() => handleDeactivate(row.original.code)}
-          >
-            <Power className="h-4 w-4 mr-1" /> Desactivar
-          </Button>
+          <ConfirmDialog
+            trigger={
+              <Button variant="destructive" size="sm" className="flex items-center gap-1">
+                <Power className="h-4 w-4 mr-1" /> Desactivar
+              </Button>
+            }
+            title="Confirmar desactivación"
+            description={`¿Seguro que quieres desactivar el departamento ${row.original.name}?`}
+            onConfirm={() => handleDeactivate(row.original.code)}
+          />
+
         </div>
       ),
     },
