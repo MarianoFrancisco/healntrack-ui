@@ -8,14 +8,14 @@ export default [
         ...prefix("employees", [
             index("routes/employees/index.tsx"),
             route("create", "routes/employees/create.tsx"),
-            route("edit", "routes/employees/edit.tsx"),
+            route(":id/edit", "routes/employees/edit.tsx")
         ]),
 
         ...prefix("departments", [
             index("routes/departments/index.tsx"),
             route("create", "routes/departments/create.tsx"),
-            route("update", "routes/departments/update.tsx"),
-            route("delete", "routes/departments/deactivate.tsx")
+            route(":id/edit", "routes/departments/edit.tsx"),
+            route(":id/deactivate", "routes/departments/deactivate.tsx")
         ])
     ]),
 ] satisfies RouteConfig;

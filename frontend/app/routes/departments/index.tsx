@@ -1,4 +1,4 @@
-import { Link, useLoaderData } from "react-router";
+import { Link, useFetcher, useLoaderData, useNavigate } from "react-router";
 import { DepartmentTable } from "~/components/departments/department-table";
 import { Button } from "~/components/ui/button";
 import { departmentService } from "~/services/department-service";
@@ -8,10 +8,7 @@ export async function loader({ request }: { request: Request }) {
   console.log("Departments loader called with:", request.url);
 
   try {
-    // En el futuro podrías pasar query params ?page=1&sort=asc
-    console.log("Fetching all departments...");
     const response = await departmentService.getAllDepartments();
-    console.log("Departments loader response:", response);
 
     return Response.json(response);
   } catch (error) {
@@ -33,9 +30,22 @@ export async function loader({ request }: { request: Request }) {
 }
 
 export default function DepartmentsPage() {
+  const navigate = useNavigate();
+  const fetcher = useFetcher();
   const response = useLoaderData<typeof loader>();
 
   const departments = (response || []) as DepartmentResponseDTO[];
+
+  const handleEdit = (code: string) => {
+    navigate(`/departments/${code}/edit`);
+  };
+
+  const handleDeactivate = (code: string) => {
+    fetcher.submit(
+      { id: code, redirectTo: "/departments" },
+      { method: "POST", action: `/departments/${code}/deactivate` }
+    );
+  };
 
   return (
     <section className="space-y-6">
@@ -48,15 +58,13 @@ export default function DepartmentsPage() {
 
       <div className="flex justify-between items-center">
         <div className="flex-1">
-          {/* 🔍 Aquí podrías agregar un buscador después */}
         </div>
         <Button asChild>
           <Link to="/departments/create">Nuevo Departamento</Link>
         </Button>
       </div>
 
-      {/* 📊 Tabla de departamentos */}
-      <DepartmentTable data={departments} />
+      <DepartmentTable data={departments} handleEdit={handleEdit} handleDeactivate={handleDeactivate} />
     </section>
   );
 }

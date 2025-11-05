@@ -12,7 +12,6 @@ export interface CreateDepartmentRequest {
 }
 
 export interface UpdateDepartmentRequest {
-  code: string;
   name?: string;
   description?: string;
 }
