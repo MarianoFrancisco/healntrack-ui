@@ -59,7 +59,7 @@ jobs:
             git pull
 
             sudo docker build \
-              -f frontend/DockerFile \
+              -f frontend/Dockerfile \
               --build-arg VITE_API_BASE_URL="${VITE_API_BASE_URL}" \
               --build-arg VITE_API_TIMEOUT="${VITE_API_TIMEOUT}" \
               -t healntrack-ui:latest \
