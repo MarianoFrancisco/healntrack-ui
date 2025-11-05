@@ -12,7 +12,8 @@ export default [
             route(":cui/terminate", "routes/employees/terminate.tsx"),
             route(":cui/rehire", "routes/employees/rehire.tsx"),
             route(":cui/reward", "routes/employees/reward.tsx"),
-            route("history", "routes/employees/history.tsx")
+            route("history", "routes/employees/history.tsx"),
+            route("managers", "routes/employees/managers.tsx"),
         ]),
 
         ...prefix("departments", [

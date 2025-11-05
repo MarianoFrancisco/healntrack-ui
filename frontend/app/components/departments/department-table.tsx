@@ -93,16 +93,16 @@ export function DepartmentTable({ data, handleEdit, handleDeactivate }: Departme
             size="sm"
             onClick={() => handleEdit(row.original.code)}
           >
-            <Edit className="h-4 w-4 mr-1" /> Editar
+            Editar
           </Button>
           <ConfirmDialog
             trigger={
               <Button variant="destructive" size="sm" className="flex items-center gap-1">
-                <Power className="h-4 w-4 mr-1" /> Desactivar
+                Desactivar
               </Button>
             }
             title="Confirmar desactivación"
-            description={`¿Seguro que quieres desactivar el departamento ${row.original.name}?`}
+            description={`¿Seguro que quieres desactivar el departamento ${row.original.name}? Esta acción no se puede deshacer.`}
             onConfirm={() => handleDeactivate(row.original.code)}
           />
 

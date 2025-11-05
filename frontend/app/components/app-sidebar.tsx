@@ -54,12 +54,16 @@ const data = {
       isActive: true,
       items: [
         {
+          title: "Contratar",
+          url: "/employees/hire",
+        },
+        {
           title: "Listado",
           url: "/employees",
         },
         {
-          title: "Contratar",
-          url: "/employees/hire",
+          title: "Managers",
+          url: "/employees/managers",
         },
         {
           title: "Historial laboral",

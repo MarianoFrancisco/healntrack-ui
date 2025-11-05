@@ -1,16 +1,16 @@
-import { ArrowUpDown, Calendar, User, Building2, Briefcase, Banknote } from "lucide-react";
+import { ArrowUpDown, Calendar, IdCard, User, Building2, Shield } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
-import type { ColumnDef } from "@tanstack/react-table";
-import type { EmploymentResponseDTO } from "~/types/employee";
 import { DataTable } from "../common/data-table";
+import type { ColumnDef } from "@tanstack/react-table";
+import type { DepartmentManagerResponseDTO } from "~/types/employee";
 
-interface EmploymentTableProps {
-  data: EmploymentResponseDTO[];
+interface DepartmentManagerTableProps {
+  data: DepartmentManagerResponseDTO[];
 }
 
-export function EmploymentTable({ data }: EmploymentTableProps) {
-  const columns: ColumnDef<EmploymentResponseDTO>[] = [
+export function DepartmentManagerTable({ data }: DepartmentManagerTableProps) {
+  const columns: ColumnDef<DepartmentManagerResponseDTO>[] = [
     {
       accessorKey: "startDate",
       header: ({ column }) => (
@@ -35,7 +35,24 @@ export function EmploymentTable({ data }: EmploymentTableProps) {
       },
     },
     {
-      accessorKey: "employeeFullname",
+      accessorKey: "employeeCui",
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          onClick={() =>
+            column.toggleSorting(column.getIsSorted() === "asc")
+          }
+          className="flex items-center gap-2 font-semibold"
+        >
+          <IdCard className="h-4 w-4" />
+          CUI
+          <ArrowUpDown className="ml-1 h-4 w-4" />
+        </Button>
+      ),
+      cell: (info) => info.getValue(),
+    },
+    {
+      accessorKey: "employeeFullName",
       header: ({ column }) => (
         <Button
           variant="ghost"
@@ -45,7 +62,7 @@ export function EmploymentTable({ data }: EmploymentTableProps) {
           className="flex items-center gap-2 font-semibold"
         >
           <User className="h-4 w-4" />
-          Empleado
+          Nombre completo
           <ArrowUpDown className="ml-1 h-4 w-4" />
         </Button>
       ),
@@ -62,14 +79,14 @@ export function EmploymentTable({ data }: EmploymentTableProps) {
           className="flex items-center gap-2 font-semibold"
         >
           <Building2 className="h-4 w-4" />
-          Departamento
+          Area
           <ArrowUpDown className="ml-1 h-4 w-4" />
         </Button>
       ),
       cell: (info) => info.getValue(),
     },
     {
-      accessorKey: "type",
+      accessorKey: "isActive",
       header: ({ column }) => (
         <Button
           variant="ghost"
@@ -78,47 +95,25 @@ export function EmploymentTable({ data }: EmploymentTableProps) {
           }
           className="flex items-center gap-2 font-semibold"
         >
-          <Briefcase className="h-4 w-4" />
-          Tipo
+          <Shield className="h-4 w-4" />
+          Estado
           <ArrowUpDown className="ml-1 h-4 w-4" />
         </Button>
       ),
       cell: ({ getValue }) => {
-        const type = getValue() as string;
-        const color =
-          type === "HIRING"
-            ? "bg-green-100 text-green-700 dark:bg-green-800 dark:text-green-100"
-            : type === "TERMINATION"
-            ? "bg-red-100 text-red-700 dark:bg-red-800 dark:text-red-100"
-            : "bg-blue-100 text-blue-700 dark:bg-blue-800 dark:text-blue-100";
+        const isActive = getValue() as boolean;
         return (
-          <Badge variant="secondary" className={`px-2 py-1 ${color}`}>
-            {type}
+          <Badge
+            variant={isActive ? "secondary" : "destructive"}
+            className={`px-2 py-1 ${
+              isActive
+                ? "bg-green-100 text-green-700 dark:bg-green-800 dark:text-green-100"
+                : "bg-red-100 text-red-700 dark:bg-red-800 dark:text-red-100"
+            }`}
+          >
+            {isActive ? "Activo" : "Inactivo"}
           </Badge>
         );
-      },
-    },
-    {
-      accessorKey: "salary",
-      header: ({ column }) => (
-        <Button
-          variant="ghost"
-          onClick={() =>
-            column.toggleSorting(column.getIsSorted() === "asc")
-          }
-          className="flex items-center gap-2 font-semibold"
-        >
-            <Banknote className="h-4 w-4" />
-          Salario
-          <ArrowUpDown className="ml-1 h-4 w-4" />
-        </Button>
-      ),
-      cell: ({ getValue }) => {
-        const salary = getValue() as number;
-        return salary.toLocaleString("es-GT", {
-          style: "currency",
-          currency: "GTQ",
-        });
       },
     },
   ];

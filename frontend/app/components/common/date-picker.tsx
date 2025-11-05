@@ -47,7 +47,7 @@ export function DatePicker({
           className={`${className} justify-between font-normal`}
           disabled={disabled}
         >
-          {date ? date.toLocaleDateString() : placeholder}
+          {date ? date.toLocaleDateString("es-GT") : placeholder}
           <ChevronDownIcon className="opacity-70" />
         </Button>
       </PopoverTrigger>
