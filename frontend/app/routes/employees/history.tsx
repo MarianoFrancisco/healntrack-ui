@@ -5,6 +5,20 @@ import type { EmploymentResponseDTO } from "~/types/employee";
 import { useLoaderData } from "react-router";
 import type { Route } from "../+types/home";
 
+export function meta({}: Route.MetaArgs) {
+  return [
+    { title: "Historial laboral" },
+    {
+      name: "description",
+      content: "Consulta el historial laboral de los empleados y filtra por diferentes criterios",
+    },
+  ];
+}
+
+export const handle = {
+  crumb: "Historial laboral",
+};
+
 export async function loader({ request }: Route.LoaderArgs) {
   const url = new URL(request.url);
   const rawParams = Object.fromEntries(url.searchParams.entries());
