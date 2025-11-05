@@ -70,6 +70,6 @@ jobs:
             sudo docker rm healntrack-ui || true
 
             sudo docker run -d --name healntrack-ui \
-              -p 80:80 \
+              -p 80:3000 \
               healntrack-ui:latest
           EOF
