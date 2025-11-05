@@ -19,30 +19,40 @@ jobs:
             echo "SSH_USER=${{ secrets.EC2_USER_PROD }}" >> $GITHUB_ENV
             echo "VITE_API_BASE_URL=${{ secrets.VITE_API_BASE_URL_PROD }}" >> $GITHUB_ENV
             echo "VITE_API_TIMEOUT=${{ secrets.VITE_API_TIMEOUT_PROD }}" >> $GITHUB_ENV
-            echo "SSH_KEY=${{ secrets.EC2_SSH_KEY_PROD }}" >> $GITHUB_ENV
           else
             echo "HOST=${{ secrets.EC2_HOST }}" >> $GITHUB_ENV
             echo "SSH_USER=${{ secrets.EC2_USER }}" >> $GITHUB_ENV
             echo "VITE_API_BASE_URL=${{ secrets.VITE_API_BASE_URL }}" >> $GITHUB_ENV
             echo "VITE_API_TIMEOUT=${{ secrets.VITE_API_TIMEOUT }}" >> $GITHUB_ENV
-            echo "SSH_KEY=${{ secrets.EC2_SSH_KEY }}" >> $GITHUB_ENV
           fi
 
-      - name: Set up SSH
-        shell: bash
+      - name: Write SSH key for QA
+        if: github.ref_name != 'main'
         run: |
           mkdir -p ~/.ssh
-          echo "${SSH_KEY}" > ~/.ssh/id_rsa
+          printf '%s' '${{ secrets.EC2_SSH_KEY }}' > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
+
+      - name: Write SSH key for PROD
+        if: github.ref_name == 'main'
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s' '${{ secrets.EC2_SSH_KEY_PROD }}' > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+      - name: Add host to known_hosts
+        run: |
           ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts
 
       - name: Deploy to EC2 via SSH
         shell: bash
+        env:
+          GITHUB_REF_NAME: ${{ github.ref_name }}
         run: |
           ssh "$SSH_USER@$HOST" << EOF
             set -e
 
-            cd ./healntrack-ui || exit 1
+            cd ./healntrack-ui
 
             git fetch --all --prune
             git checkout "${GITHUB_REF_NAME}"
