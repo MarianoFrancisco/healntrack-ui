@@ -8,7 +8,8 @@ import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "~
 import { DatePicker } from "~/components/common/date-picker";
 import { ErrorAlert } from "../common/error-alert";
 import { SuccessAlert } from "../common/success-alert";
-import type { PatientResponseDTO, CreatePatientRequestDTO } from "~/types/patient";
+import type { PatientResponseDTO } from "~/types/patient";
+import { Textarea } from "../ui/textarea";
 
 interface PatientFormProps {
   patient?: PatientResponseDTO;
@@ -17,7 +18,6 @@ interface PatientFormProps {
 export function PatientForm({ patient }: PatientFormProps) {
   const actionData = useActionData() as { error?: string; success?: string; errors?: Record<string, string> } | undefined;
   const navigation = useNavigation();
-  const [submitted, setSubmitted] = useState(false);
   const [birthDate, setBirthDate] = useState<Date | undefined>(
     patient?.birthDate ? new Date(patient.birthDate) : undefined
   );
@@ -25,7 +25,7 @@ export function PatientForm({ patient }: PatientFormProps) {
   const isEditMode = !!patient;
 
   return (
-    <div className="mx-auto max-w-xl space-y-6">
+    <div className="mx-auto max-w-4xl space-y-6">
       <h2 className="text-2xl font-semibold tracking-tight">
         {isEditMode ? "Editar paciente" : "Crear paciente"}
       </h2>
@@ -35,9 +35,9 @@ export function PatientForm({ patient }: PatientFormProps) {
 
       <Form
         method="post"
-        onSubmit={() => setSubmitted(true)}
-        className="space-y-4 rounded-lg border p-6 shadow-sm bg-white"
+        className="grid grid-cols-1 sm:grid-cols-2 gap-6 rounded-lg border p-6 shadow-sm bg-white"
       >
+        {/* CUI */}
         <div className="space-y-2">
           <Label htmlFor="cui">CUI</Label>
           <Input
@@ -53,6 +53,7 @@ export function PatientForm({ patient }: PatientFormProps) {
           {actionData?.errors?.cui && <p className="text-sm text-red-600">{actionData.errors.cui}</p>}
         </div>
 
+        {/* Nombre */}
         <div className="space-y-2">
           <Label htmlFor="fullName">Nombre completo</Label>
           <Input
@@ -67,6 +68,7 @@ export function PatientForm({ patient }: PatientFormProps) {
           {actionData?.errors?.fullName && <p className="text-sm text-red-600">{actionData.errors.fullName}</p>}
         </div>
 
+        {/* Fecha de nacimiento */}
         <div className="space-y-2">
           <Label htmlFor="birthDate">Fecha de nacimiento</Label>
           <DatePicker
@@ -82,10 +84,11 @@ export function PatientForm({ patient }: PatientFormProps) {
           {actionData?.errors?.birthDate && <p className="text-sm text-red-600">{actionData.errors.birthDate}</p>}
         </div>
 
+        {/* Género */}
         <div className="space-y-2">
           <Label htmlFor="gender">Género</Label>
           <Select name="gender" defaultValue={patient?.gender ?? ""}>
-            <SelectTrigger id="gender">
+            <SelectTrigger id="gender" className="w-full">
               <SelectValue placeholder="Selecciona un género" />
             </SelectTrigger>
             <SelectContent>
@@ -97,62 +100,69 @@ export function PatientForm({ patient }: PatientFormProps) {
           {actionData?.errors?.gender && <p className="text-sm text-red-600">{actionData.errors.gender}</p>}
         </div>
 
-        <div className="space-y-2">
+        {/* Email, Teléfono y Teléfono de emergencia en 3 columnas */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:col-span-2">
+          <div className="space-y-2">
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              name="email"
+              type="email"
+              placeholder="Correo electrónico"
+              maxLength={100}
+              defaultValue={patient?.email ?? ""}
+              required
+            />
+            {actionData?.errors?.email && <p className="text-sm text-red-600">{actionData.errors.email}</p>}
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="phoneNumber">Teléfono</Label>
+            <Input
+              id="phoneNumber"
+              name="phoneNumber"
+              type="text"
+              placeholder="Número de teléfono"
+              maxLength={8}
+              defaultValue={patient?.phoneNumber ?? ""}
+              required
+            />
+            {actionData?.errors?.phoneNumber && <p className="text-sm text-red-600">{actionData.errors.phoneNumber}</p>}
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="emergencyPhoneNumber">Teléfono de emergencia</Label>
+            <Input
+              id="emergencyPhoneNumber"
+              name="emergencyPhoneNumber"
+              type="text"
+              placeholder="Número de emergencia"
+              maxLength={8}
+              defaultValue={patient?.emergencyPhoneNumber ?? ""}
+              required
+            />
+            {actionData?.errors?.emergencyPhoneNumber && (
+              <p className="text-sm text-red-600">{actionData.errors.emergencyPhoneNumber}</p>
+            )}
+          </div>
+        </div>
+
+        {/* Dirección */}
+        <div className="space-y-2 sm:col-span-2">
           <Label htmlFor="address">Dirección</Label>
-          <Input
+          <Textarea
             id="address"
             name="address"
-            type="text"
             placeholder="Dirección completa"
             defaultValue={patient?.address ?? ""}
+            maxLength={100}
             required
           />
           {actionData?.errors?.address && <p className="text-sm text-red-600">{actionData.errors.address}</p>}
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
-          <Input
-            id="email"
-            name="email"
-            type="email"
-            placeholder="Correo electrónico"
-            maxLength={100}
-            defaultValue={patient?.email ?? ""}
-            required
-          />
-          {actionData?.errors?.email && <p className="text-sm text-red-600">{actionData.errors.email}</p>}
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="phoneNumber">Teléfono</Label>
-          <Input
-            id="phoneNumber"
-            name="phoneNumber"
-            type="text"
-            placeholder="Número de teléfono"
-            maxLength={8}
-            defaultValue={patient?.phoneNumber ?? ""}
-            required
-          />
-          {actionData?.errors?.phoneNumber && <p className="text-sm text-red-600">{actionData.errors.phoneNumber}</p>}
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="emergencyPhoneNumber">Teléfono de emergencia</Label>
-          <Input
-            id="emergencyPhoneNumber"
-            name="emergencyPhoneNumber"
-            type="text"
-            placeholder="Número de emergencia"
-            maxLength={8}
-            defaultValue={patient?.emergencyPhoneNumber ?? ""}
-            required
-          />
-          {actionData?.errors?.emergencyPhoneNumber && <p className="text-sm text-red-600">{actionData.errors.emergencyPhoneNumber}</p>}
-        </div>
-
-        <div className="flex items-center justify-end gap-3 pt-4">
+        {/* Botón de acción */}
+        <div className="flex items-center justify-end gap-3 sm:col-span-2 pt-4">
           <Button type="submit" disabled={isSubmitting} className="flex items-center gap-2">
             {isSubmitting ? (
               <>

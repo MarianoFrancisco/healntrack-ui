@@ -9,15 +9,9 @@ import { EmploymentActions } from "./employment-actions";
 
 interface EmployeeTableProps {
   data: EmployeeResponseDTO[];
-  handleEdit: (cui: string, updated: {
-    fullname?: string;
-    phoneNumber?: string;
-    igssPercent?: number;
-    irtraPercent?: number;
-  }) => void | Promise<void>;
 }
 
-export function EmployeeTable({ data, handleEdit }: EmployeeTableProps) {
+export function EmployeeTable({ data }: EmployeeTableProps) {
   const columns: ColumnDef<EmployeeResponseDTO>[] = [
     {
       accessorKey: "cui",
@@ -101,7 +95,7 @@ export function EmployeeTable({ data, handleEdit }: EmployeeTableProps) {
         const employee = row.original;
     return (
       <div className="flex items-center gap-2">
-        <EmployeeEditDialog employee={employee} onSave={handleEdit} />
+        <EmployeeEditDialog employee={employee} />
         <EmploymentActions cui={employee.cui} isActive={employee.isActive} />
       </div>
     );

@@ -29,8 +29,6 @@ export async function action({ request }: ActionFunctionArgs) {
     await departmentService.createDepartment(departmentData);
     return redirect("/departments");
   } catch (error: any) {
-    console.error("Action error:", error);
-
     if (error instanceof ApiError && error.response) {
       try {
         const errorData = (error.response as any).data || error.response;

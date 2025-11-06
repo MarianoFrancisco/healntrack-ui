@@ -38,6 +38,7 @@ async hireEmployee(request: HireEmployeeRequestDTO): Promise<EmployeeResponseDTO
 
   async updateEmployee(cui: string, request: UpdateEmployeeRequestDTO): Promise<EmployeeResponseDTO> {
     try {
+      console.log("Updating employee:", cui, request);
       return await apiClient.patch<EmployeeResponseDTO>(`${this.basePath}/${cui}`, request);
     } catch (error) {
       return this.handleError(error);

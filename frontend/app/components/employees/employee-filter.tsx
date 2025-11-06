@@ -46,7 +46,7 @@ export function EmployeeFilter() {
       <div className="grid gap-1">
         <Label htmlFor="isActive">Estado</Label>
         <Select name="isActive" defaultValue={searchParams.get("isActive") ?? "all"}>
-          <SelectTrigger id="isActive">
+          <SelectTrigger id="isActive" className="w-full">
             <SelectValue placeholder="Selecciona un estado" />
           </SelectTrigger>
           <SelectContent>

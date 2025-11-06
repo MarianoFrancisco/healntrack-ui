@@ -61,7 +61,7 @@ export function DepartmentManagerFilter() {
           name="isActive"
           defaultValue={searchParams.get("isActive") ?? "all"}
         >
-          <SelectTrigger id="isActive">
+          <SelectTrigger id="isActive" className="w-full">
             <SelectValue placeholder="Selecciona un estado" />
           </SelectTrigger>
           <SelectContent>

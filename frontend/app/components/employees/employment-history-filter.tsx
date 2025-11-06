@@ -60,7 +60,7 @@ export function EmploymentHistoryFilter() {
       <div className="grid gap-1">
         <Label htmlFor="type">Tipo de periodo</Label>
         <Select name="type" defaultValue={searchParams.get("type") ?? "all"}>
-          <SelectTrigger id="type">
+          <SelectTrigger id="type" className="w-full">
             <SelectValue placeholder="Selecciona un tipo" />
           </SelectTrigger>
           <SelectContent>

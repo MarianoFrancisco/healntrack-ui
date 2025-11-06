@@ -1,10 +1,13 @@
-import { Link, useFetcher, useLoaderData } from "react-router";
+import { Link, redirect, useActionData, useFetcher, useLoaderData, type ActionFunctionArgs } from "react-router";
 import type { Route } from "../+types/home";
 import { EmployeeTable } from "~/components/employees/employee-table";
 import { Button } from "~/components/ui/button";
 import type { EmployeeResponseDTO, FindAllEmployeesRequestDTO, UpdateEmployeeRequestDTO } from "~/types/employee";
 import { employeeService } from "~/services/employment-service";
 import { EmployeeFilter } from "~/components/employees/employee-filter";
+import { ApiError } from "~/lib/api-client";
+import { toast } from "sonner";
+import { useEffect } from "react";
 
 export function meta({ }: Route.MetaArgs) {
   return [
@@ -39,22 +42,63 @@ export async function loader({ request }: { request: Request }) {
   }
 }
 
+export async function action({ request }: ActionFunctionArgs) {
+  const formData = await request.formData();
+  const cui = formData.get("cui") as string;
+  const redirectTo = (formData.get("redirectTo") as string) || "/employees";
+
+  if (!cui) {
+    return { error: "No se proporcionó el CUI del empleado" };
+  }
+
+  const updateRequest = {
+    fullname: formData.get("fullname") as string,
+    phoneNumber: formData.get("phoneNumber") as string,
+    igssPercent: Number(formData.get("igssPercent")) / 100,
+    irtraPercent: Number(formData.get("irtraPercent")) / 100,
+  };
+
+  try {
+    const result = await employeeService.updateEmployee(cui, updateRequest);
+    return redirect(redirectTo);
+  } catch (error: any) {
+    console.error("Error al actualizar empleado:", error);
+
+    if (error instanceof ApiError && error.response) {
+      try {
+        const errorData = (error.response as any).data || error.response;
+        return {
+          errors: errorData.errors || {},
+          error:
+            errorData.detail ||
+            errorData.message ||
+            `Error ${error.status}`,
+        };
+      } catch (parseError) {
+        return { error: `Error ${error.status}: No se pudo procesar la respuesta` };
+      }
+    }
+
+    return { error: error.message || "Error al actualizar empleado" };
+  }
+}
+
+
 export default function EmployeesPage() {
+  const actionData = useActionData() as
+    | { error?: string; success?: string; errors?: Record<string, string> }
+    | undefined;
   const employees = useLoaderData<typeof loader>() as EmployeeResponseDTO[];
   const fetcher = useFetcher();
 
-  const handleEdit = async (cui: string, updated: UpdateEmployeeRequestDTO) => {
-    const formData = new FormData();
-    formData.append("fullname", updated.fullname ?? "");
-    formData.append("phoneNumber", updated.phoneNumber ?? "");
-    formData.append("igssPercent", String(updated.igssPercent ?? 0));
-    formData.append("irtraPercent", String(updated.irtraPercent ?? 0));
-
-    fetcher.submit(formData, {
-      method: "POST",
-      action: `/employees/${cui}/edit`,
-    });
-  };
+  useEffect(() => {
+    if (actionData?.error) {
+      toast.error(actionData.error);
+    }
+    if (actionData?.success) {
+      toast.success(actionData.success);
+    }
+  }, [actionData]);
 
   return (
     <section className="space-y-6">
@@ -79,7 +123,7 @@ export default function EmployeesPage() {
       </div>
 
 
-      <EmployeeTable data={employees} handleEdit={handleEdit} />
+      <EmployeeTable data={employees} />
     </section>
   );
 }

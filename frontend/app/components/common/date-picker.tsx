@@ -26,11 +26,11 @@ export function DatePicker({
   disabled = false,
 }: DatePickerProps) {
   const [open, setOpen] = React.useState(false);
-  const [date, setDate] = React.useState<Date | undefined>(value ?? new Date());
+  const [date, setDate] = React.useState<Date | undefined>(value);
 
   // Sincroniza si el valor viene de fuera (ej. react-hook-form)
   React.useEffect(() => {
-    setDate(value ?? new Date());
+    setDate(value);
   }, [value]);
 
   const handleSelect = (selectedDate?: Date) => {

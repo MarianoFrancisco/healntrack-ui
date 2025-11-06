@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~
 import { DatePicker } from "~/components/common/date-picker";
 import { ErrorAlert } from "~/components/common/error-alert";
 import { SuccessAlert } from "~/components/common/success-alert";
+import { Textarea } from "~/components/ui/textarea";
 import type { EmployeeResponseDTO } from "~/types/employee";
 
 export interface TerminateEmploymentRequestDTO {
@@ -27,12 +28,12 @@ export function TerminateEmployeeForm({ employee }: TerminateEmployeeFormProps) 
 
   const navigation = useNavigation();
   const [submitted, setSubmitted] = useState(false);
-  const [terminationDate, setTerminationDate] = useState<Date | undefined>();
+  const [terminationDate, setTerminationDate] = useState<Date | undefined>(new Date());
 
   const isSubmitting = navigation.state === "submitting";
 
   return (
-    <div className="mx-auto max-w-xl space-y-6">
+    <div className="mx-auto max-w-3xl space-y-6">
       <h2 className="text-2xl font-semibold tracking-tight">
         Terminar relación laboral
       </h2>
@@ -47,7 +48,7 @@ export function TerminateEmployeeForm({ employee }: TerminateEmployeeFormProps) 
       <Form
         method="post"
         onSubmit={() => setSubmitted(true)}
-        className="space-y-4 rounded-lg border p-6 shadow-sm bg-white"
+        className="grid grid-cols-1 md:grid-cols-2 gap-6 rounded-lg border p-6 shadow-sm bg-white"
       >
         {/* CUI */}
         <div className="space-y-2">
@@ -83,7 +84,7 @@ export function TerminateEmployeeForm({ employee }: TerminateEmployeeFormProps) 
         <div className="space-y-2">
           <Label htmlFor="terminationType">Tipo de terminación</Label>
           <Select name="terminationType" defaultValue="">
-            <SelectTrigger id="terminationType">
+            <SelectTrigger id="terminationType" className="w-full">
               <SelectValue placeholder="Selecciona un tipo" />
             </SelectTrigger>
             <SelectContent>
@@ -97,14 +98,13 @@ export function TerminateEmployeeForm({ employee }: TerminateEmployeeFormProps) 
         </div>
 
         {/* Motivo */}
-        <div className="space-y-2">
+        <div className="space-y-2 md:col-span-2">
           <Label htmlFor="reason">Motivo</Label>
-          <Input
+          <Textarea
             id="reason"
             name="reason"
-            type="text"
+            placeholder="Describe brevemente el motivo de la terminación"
             maxLength={255}
-            placeholder="Describe brevemente el motivo"
           />
           {actionData?.errors?.reason && (
             <p className="text-sm text-red-600">{actionData.errors.reason}</p>
@@ -112,7 +112,7 @@ export function TerminateEmployeeForm({ employee }: TerminateEmployeeFormProps) 
         </div>
 
         {/* Botones */}
-        <div className="flex items-center justify-end gap-3 pt-4">
+        <div className="flex items-center justify-end gap-3 pt-4 md:col-span-2">
           <Button type="submit" disabled={isSubmitting} className="flex items-center gap-2">
             {isSubmitting ? (
               <>

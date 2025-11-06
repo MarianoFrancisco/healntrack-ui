@@ -8,6 +8,7 @@ import { Combobox, type ComboboxOption } from "~/components/common/combobox-opti
 import { ErrorAlert } from "~/components/common/error-alert";
 import { SuccessAlert } from "~/components/common/success-alert";
 import { DatePicker } from "../common/date-picker";
+import { Textarea } from "~/components/ui/textarea";
 import type { EmployeeResponseDTO } from "~/types/employee";
 
 interface EmployeeRehireFormProps {
@@ -20,15 +21,13 @@ export function RehireEmployeeForm({ employee, departments = [] }: EmployeeRehir
   const navigation = useNavigation();
   const [submitted, setSubmitted] = useState(false);
   const [selectedDepartment, setSelectedDepartment] = useState<string>("");
+  const [startDate, setStartDate] = useState<Date | undefined>();
 
   const isSubmitting = navigation.state === "submitting";
 
-  // Local states for dates
-  const [startDate, setStartDate] = useState<Date | undefined>();
-
   return (
     <div className="mx-auto max-w-4xl space-y-6">
-      <h2 className="text-2xl font-semibold tracking-tight">Contratar empleado</h2>
+      <h2 className="text-2xl font-semibold tracking-tight">Recontratar empleado</h2>
 
       {actionData?.error && <ErrorAlert title="Error" description={actionData.error} />}
       {actionData?.success && <SuccessAlert title="Éxito" description={actionData.success} />}
@@ -38,47 +37,30 @@ export function RehireEmployeeForm({ employee, departments = [] }: EmployeeRehir
         onSubmit={() => setSubmitted(true)}
         className="space-y-6 rounded-lg border p-6 shadow-sm bg-white"
       >
-        {/* Campos en 2 columnas responsive */}
+        {/* Campos principales en 2 columnas */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* CUI */}
           <div className="space-y-2">
             <Label htmlFor="cui">CUI</Label>
-            <Input
-              id="cui"
-              value={employee.cui}
-              disabled
-              
-            />
+            <Input id="cui" value={employee.cui} disabled />
           </div>
 
           {/* NIT */}
           <div className="space-y-2">
             <Label htmlFor="nit">NIT</Label>
-            <Input
-              id="nit"
-              value={employee.nit}
-              disabled
-            />
+            <Input id="nit" value={employee.nit} disabled />
           </div>
 
           {/* Nombre completo */}
           <div className="space-y-2">
             <Label htmlFor="fullname">Nombre completo</Label>
-            <Input
-              id="fullname"
-              value={employee.fullname}
-              disabled
-            />
+            <Input id="fullname" value={employee.fullname} disabled />
           </div>
 
           {/* Email */}
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              value={employee.email}
-              disabled
-            />
+            <Input id="email" value={employee.email} disabled />
           </div>
 
           {/* Teléfono */}
@@ -106,13 +88,13 @@ export function RehireEmployeeForm({ employee, departments = [] }: EmployeeRehir
 
           {/* Departamento */}
           <div className="space-y-2">
-            <Label htmlFor="departmentCode">Area</Label>
+            <Label htmlFor="departmentCode">Área</Label>
             <input type="hidden" name="departmentCode" value={selectedDepartment} />
             <Combobox
               options={departments}
               value={selectedDepartment}
               onChange={setSelectedDepartment}
-              placeholder="Seleccionar area"
+              placeholder="Seleccionar área"
             />
           </div>
 
@@ -126,7 +108,10 @@ export function RehireEmployeeForm({ employee, departments = [] }: EmployeeRehir
             />
             <DatePicker value={startDate} onChange={setStartDate} placeholder="Selecciona fecha" />
           </div>
+        </div>
 
+        {/* Fila: salario + igss + irtra */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Salario */}
           <div className="space-y-2">
             <Label htmlFor="salary">Salario</Label>
@@ -161,31 +146,34 @@ export function RehireEmployeeForm({ employee, departments = [] }: EmployeeRehir
               name="irtraPercent"
               type="number"
               step="0.1"
-              placeholder="Ej. 4.83"
+              placeholder="Ej. 1.00"
               required
-            />
-          </div>
-
-          {/* Notas */}
-          <div className="md:col-span-2 space-y-2">
-            <Label htmlFor="notes">Notas</Label>
-            <Input
-              id="notes"
-              name="notes"
-              type="text"
-              maxLength={250}
-              placeholder="Opcional"
             />
           </div>
         </div>
 
+        {/* Notas */}
+        <div className="space-y-2">
+          <Label htmlFor="notes">Notas o comentarios</Label>
+          <Textarea
+            id="notes"
+            name="notes"
+            maxLength={250}
+            placeholder="Detalles adicionales (opcional)"
+          />
+        </div>
+
         {/* Botón */}
         <div className="flex items-center justify-end pt-4">
-          <Button type="submit" disabled={isSubmitting} className="flex items-center gap-2">
+          <Button
+            type="submit"
+            disabled={isSubmitting}
+            className="flex items-center gap-2"
+          >
             {isSubmitting ? (
               <>
                 <Loader2 className="h-4 w-4 animate-spin" />
-                Creando...
+                Procesando...
               </>
             ) : (
               <>

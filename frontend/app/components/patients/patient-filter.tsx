@@ -33,7 +33,7 @@ export function PatientFilter() {
       <div className="grid gap-1">
         <Label htmlFor="gender">Género</Label>
         <Select name="gender" defaultValue={searchParams.get("gender") ?? "all"}>
-          <SelectTrigger id="gender">
+          <SelectTrigger id="gender" className="w-full">
             <SelectValue placeholder="Selecciona un género" />
           </SelectTrigger>
           <SelectContent>
