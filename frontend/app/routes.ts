@@ -15,6 +15,14 @@ export default [
             route("managers", "routes/employees/managers.tsx"),
         ]),
 
+        ...prefix("vacations", [
+            index("routes/vacations/index.tsx"),
+            route("create", "routes/vacations/create.tsx"),
+            route("conf", "routes/vacations/conf.tsx"),
+            // route(":id/approve", "routes/vacations/approve.tsx"),
+            // route(":id/reject", "routes/vacations/reject.tsx"),
+        ]),
+
         ...prefix("payrolls", [
             index("routes/payrolls/index.tsx"),
             route("create", "routes/payrolls/create.tsx"),

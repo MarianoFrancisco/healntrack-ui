@@ -33,3 +33,12 @@ export interface VacationResponseDTO {
   reviewedAt?: string;
   status: string;
 }
+
+export interface ConfigurationResponseDTO {
+  key: string;
+  value?: number;
+}
+
+export interface UpdateConfDTO {
+  value: number;
+}

@@ -13,6 +13,7 @@ import type {
   HireEmployeeRequestDTO
 } from "~/types/employee";
 import { apiClient, ApiError } from "~/lib/api-client";
+import type { ConfigurationResponseDTO, UpdateConfDTO } from "~/types/vacation";
 
 class EmployeeService {
   private basePath = "/api/v1/employees";
@@ -136,6 +137,25 @@ async hireEmployee(request: HireEmployeeRequestDTO): Promise<EmployeeResponseDTO
       const endpoint = queryString ? `${this.basePath}/managers?${queryString}` : `${this.basePath}/managers`;
 
       return apiClient.get<DepartmentManagerResponseDTO[]>(endpoint);
+    } catch (error) {
+      return this.handleError(error);
+    }
+  }
+
+    /** Obtiene todas las configuraciones del sistema */
+  async findAllConf(): Promise<ConfigurationResponseDTO[]> {
+    try {
+      const response = await apiClient.get<ConfigurationResponseDTO[]>(`${this.basePath}/config`);
+      return response;
+    } catch (error) {
+      return this.handleError(error);
+    }
+  }
+
+  /** Actualiza una configuración existente */
+  async updateConf(key: string, request: UpdateConfDTO): Promise<ConfigurationResponseDTO> {
+    try {
+      return await apiClient.put<ConfigurationResponseDTO>(`${this.basePath}/config/${key}`, request);
     } catch (error) {
       return this.handleError(error);
     }
