@@ -85,7 +85,7 @@ export function RewardEmployeeForm({ employee }: RewardEmployeeFormProps) {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="AUMENTO">Aumento salarial</SelectItem>
-              <SelectItem value="ASCENSO">Ascenso (nuevo cargo)</SelectItem>
+              <SelectItem value="ASCENSO">Ascenso a jefe de {employee.department?.name ?? "Sin departamento"}</SelectItem>
             </SelectContent>
           </Select>
           {actionData?.errors?.rewardType && (

@@ -37,7 +37,6 @@ const data = {
       title: "Areas del hospital",
       url: "/departments",
       icon: Users,
-      isActive: true,
       items: [
         {
           title: "Listado",
@@ -53,7 +52,6 @@ const data = {
       title: "Empleados",
       url: "/employees",
       icon: BriefcaseBusiness,
-      isActive: true,
       items: [
         {
           title: "Contratar",
@@ -77,7 +75,6 @@ const data = {
       title: "Nómina",
       url: "/payrolls",
       icon: BriefcaseBusiness,
-      isActive: true,
       items: [
         {
           title: "Pagar nómina",
