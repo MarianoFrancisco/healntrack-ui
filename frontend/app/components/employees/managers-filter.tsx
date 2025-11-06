@@ -36,11 +36,11 @@ export function DepartmentManagerFilter() {
       className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 p-4 border rounded-lg bg-card shadow-sm"
     >
       <div className="grid gap-1">
-        <Label htmlFor="employee">Empleado</Label>
+        <Label htmlFor="employee">Jefe de área</Label>
         <Input
           id="employee"
           name="employee"
-          placeholder="CUI o nombre del empleado"
+          placeholder="CUI o nombre"
           defaultValue={searchParams.get("employee") ?? ""}
         />
       </div>
@@ -50,7 +50,7 @@ export function DepartmentManagerFilter() {
         <Input
           id="department"
           name="department"
-          placeholder="Código o nombre del departamento"
+          placeholder="Código o nombre"
           defaultValue={searchParams.get("department") ?? ""}
         />
       </div>

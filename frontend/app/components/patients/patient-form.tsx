@@ -74,7 +74,7 @@ export function PatientForm({ patient }: PatientFormProps) {
           <DatePicker
             value={birthDate}
             onChange={(date) => setBirthDate(date)}
-            placeholder="Selecciona la fecha de nacimiento"
+            placeholder="Selecciona una fecha"
           />
           <input
             type="hidden"

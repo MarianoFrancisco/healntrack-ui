@@ -7,6 +7,7 @@ import { Loader2, Save } from "lucide-react";
 import type { DepartmentResponseDTO } from "~/types/department";
 import { ErrorAlert } from "../common/error-alert";
 import { SuccessAlert } from "../common/success-alert";
+import { Textarea } from "../ui/textarea";
 
 interface DepartmentFormProps {
   department?: DepartmentResponseDTO;
@@ -76,10 +77,9 @@ export function DepartmentForm({ department }: DepartmentFormProps) {
         {/* Descripción */}
         <div className="space-y-2">
           <Label htmlFor="description">Descripción</Label>
-          <Input
+          <Textarea
             id="description"
             name="description"
-            type="text"
             maxLength={255}
             placeholder="Breve descripción del departamento"
             defaultValue={department?.description ?? ""}

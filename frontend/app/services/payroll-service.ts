@@ -1,5 +1,5 @@
 import { apiClient, ApiError } from "~/lib/api-client";
-import type { PayPayrollRequestDTO, PayrollItemResponseDTO } from "~/types/payroll";
+import type { FindAllPayrollsQuery, PayPayrollRequestDTO, PayrollItemResponseDTO } from "~/types/payroll";
 
 class PayrollService {
   private basePath = "/api/v1/employees/payrolls";
@@ -22,17 +22,17 @@ class PayrollService {
     }
   }
 
-  async getAllPayrolls(params?: Record<string, any>): Promise<PayrollItemResponseDTO[]> {
+  async getAllPayrolls(params?: FindAllPayrollsQuery): Promise<PayrollItemResponseDTO[]> {
     try {
       const queryParams = new URLSearchParams();
 
-      if (params) {
-        Object.entries(params).forEach(([key, value]) => {
-          if (value !== undefined && value !== null && value !== "") {
-            queryParams.append(key, String(value));
-          }
-        });
-      }
+      if (params?.employee) queryParams.append("employee", params.employee);
+      if (params?.department) queryParams.append("department", params.department);
+      if (params?.paydayFrom) queryParams.append("paydayFrom", params.paydayFrom);
+      if (params?.paydayTo) queryParams.append("paydayTo", params.paydayTo);
+      if (params?.startDate) queryParams.append("startDate", params.startDate);
+      if (params?.endDate) queryParams.append("endDate", params.endDate);
+      if (params?.type) queryParams.append("type", params.type);
 
       const queryString = queryParams.toString();
       const endpoint = queryString ? `${this.basePath}?${queryString}` : this.basePath;

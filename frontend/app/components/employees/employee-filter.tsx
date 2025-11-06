@@ -26,7 +26,7 @@ export function EmployeeFilter() {
         <Input
           id="q"
           name="q"
-          placeholder="CUI o nombre del empleado"
+          placeholder="CUI o nombre"
           defaultValue={searchParams.get("q") ?? ""}
         />
       </div>
@@ -37,7 +37,7 @@ export function EmployeeFilter() {
         <Input
           id="department"
           name="department"
-          placeholder="Código o nombre del departamento"
+          placeholder="Código o nombre"
           defaultValue={searchParams.get("department") ?? ""}
         />
       </div>
