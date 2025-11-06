@@ -2,12 +2,13 @@ import { Link, useFetcher, useLoaderData, useNavigate } from "react-router";
 import { DepartmentTable } from "~/components/departments/department-table";
 import { Button } from "~/components/ui/button";
 import { departmentService } from "~/services/department-service";
-import type { DepartmentResponseDTO } from "~/types/department";
+import type { DepartmentResponseDTO, FindDepartmentsRequest } from "~/types/department";
 import type { Route } from "../+types/home";
+import { DepartmentFilter } from "~/components/departments/department-filter";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "Areas" },
+    { title: "Áreas" },
     { name: "description", content: "Listado de areas" },
   ];
 }
@@ -17,36 +18,29 @@ export const handle = {
 };
 
 export async function loader({ request }: { request: Request }) {
-  console.log("Departments loader called with:", request.url);
+  const url = new URL(request.url);
+  const params = Object.fromEntries(url.searchParams.entries());
+
+  const filters: FindDepartmentsRequest = {};
+
+  if (params.q && params.q.trim() !== "") filters.q = params.q.trim();
+  if (params.isActive && params.isActive !== "all") {
+    filters.isActive = params.isActive === "true";
+  }
 
   try {
-    const response = await departmentService.getAllDepartments();
-
-    return Response.json(response);
+    const departments = await departmentService.getAllDepartments(filters);
+    return Response.json(departments);
   } catch (error) {
-    console.error("Departments loader error:", error);
-    return Response.json(
-      {
-        data: [],
-        totalElements: 0,
-        pageNumber: 1,
-        totalPages: 0,
-        isFirst: true,
-        isLast: true,
-        hasNext: false,
-        hasPrevious: false,
-      },
-      { status: 500 }
-    );
+    console.error("Error al cargar departamentos:", error);
+    return Response.json([], { status: 500 });
   }
 }
 
 export default function DepartmentsPage() {
   const navigate = useNavigate();
   const fetcher = useFetcher();
-  const response = useLoaderData<typeof loader>();
-
-  const departments = (response || []) as DepartmentResponseDTO[];
+  const departments = useLoaderData<typeof loader>() as DepartmentResponseDTO[];
 
   const handleEdit = (code: string) => {
     navigate(`/departments/${code}/edit`);
@@ -61,22 +55,33 @@ export default function DepartmentsPage() {
 
   return (
     <section className="space-y-6">
+      {/* Encabezado */}
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Departamentos</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Áreas</h1>
         <p className="text-muted-foreground">
           Gestiona las áreas o departamentos registrados en el sistema.
         </p>
       </div>
 
-      <div className="flex justify-between items-center">
+      {/* Filtro + botón de crear */}
+      <div className="flex flex-col lg:flex-row lg:items-end lg:gap-4 w-full">
         <div className="flex-1">
+          <DepartmentFilter />
         </div>
-        <Button asChild>
-          <Link to="/departments/create">Nuevo Departamento</Link>
-        </Button>
+
+        <div className="flex lg:justify-start justify-end">
+          <Button asChild>
+            <Link to="/departments/create">Nuevo Departamento</Link>
+          </Button>
+        </div>
       </div>
 
-      <DepartmentTable data={departments} handleEdit={handleEdit} handleDeactivate={handleDeactivate} />
+      {/* Tabla */}
+      <DepartmentTable
+        data={departments}
+        handleEdit={handleEdit}
+        handleDeactivate={handleDeactivate}
+      />
     </section>
   );
 }
