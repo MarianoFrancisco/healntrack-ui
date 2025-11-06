@@ -88,20 +88,20 @@ const data = {
     },
     {
       title: "Vacaciones",
-      url: "/employees/vacations",
+      url: "/vacations",
       icon: TreePalm,
       items: [
         {
           title: "Nueva solicitud",
-          url: "/employees/vacations/create",
+          url: "/vacations/create",
         },
         {
           title: "Listado de solicitudes",
-          url: "/employees/vacations",
+          url: "/vacations",
         },
         {
           title: "Configuración",
-          url: "/employees/conf",
+          url: "/vacations/conf",
         },
       ],
     },
@@ -117,14 +117,6 @@ const data = {
         {
           title: "Listado de pacientes",
           url: "/patients",
-        },
-        {
-          title: "Nueva consulta",
-          url: "/consultations/create",
-        },
-        {
-          title: "Historial de consultas",
-          url: "/consultations",
         },
       ],
     },
