@@ -35,14 +35,23 @@ export function Combobox({ options, value, onChange, placeholder = "Select...", 
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className={cn("w-[200px] justify-between", className)}
+          className={cn("w-full justify-between", className)}
         >
           {value ? options.find((opt) => opt.value === value)?.label : placeholder}
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
-        <Command>
+      <PopoverContent className="w-full p-0">
+        <Command
+          filter={(value, search) => {
+            // Encuentra el label correspondiente al value
+            const option = options.find((opt) => opt.value === value)
+            if (!option) return 0
+
+            // Filtramos solo por el label
+            return option.label.toLowerCase().includes(search.toLowerCase()) ? 1 : 0
+          }}
+        >
           <CommandInput placeholder={`${placeholder.toLowerCase()}...`} className="h-9" />
           <CommandList>
             <CommandEmpty>No se encontraron opciones.</CommandEmpty>

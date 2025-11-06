@@ -7,6 +7,7 @@ import {
   Info,
   Pill,
   SquareUser,
+  Stethoscope,
   TreePalm,
   Users,
 } from "lucide-react"
@@ -107,7 +108,7 @@ const data = {
         },
       ],
     },
-        {
+    {
       title: "Pacientes",
       url: "/patients",
       icon: SquareUser,
@@ -120,6 +121,21 @@ const data = {
           title: "Listado de pacientes",
           url: "/patients",
         },
+        {
+          title: "Nueva consulta",
+          url: "/consultations/create",
+        },
+        {
+          title: "Historial de consultas",
+          url: "/consultations",
+        },
+      ],
+    },
+    {
+      title: "Consultas Médicas",
+      url: "/consultations",
+      icon: Stethoscope,
+      items: [
         {
           title: "Nueva consulta",
           url: "/consultations/create",

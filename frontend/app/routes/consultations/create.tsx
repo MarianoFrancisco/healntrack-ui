@@ -27,12 +27,12 @@ export async function loader(_: LoaderFunctionArgs) {
     ]);
 
     const patientOptions: ComboboxOption[] = patients.map((p) => ({
-      label: `${p.fullName} (${p.cui})`,
+      label: p.fullName,
       value: p.id,
     }));
 
     const doctorOptions: ComboboxOption[] = doctors.map((d) => ({
-      label: `${d.fullname} (${d.cui})`,
+      label: d.fullname,
       value: d.id,
     }));
 

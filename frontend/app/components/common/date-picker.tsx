@@ -22,15 +22,15 @@ export function DatePicker({
   value,
   onChange,
   placeholder = "Selecciona una fecha",
-  className = "w-48",
+  className = "w-full",
   disabled = false,
 }: DatePickerProps) {
   const [open, setOpen] = React.useState(false);
-  const [date, setDate] = React.useState<Date | undefined>(value);
+  const [date, setDate] = React.useState<Date | undefined>(value ?? new Date());
 
   // Sincroniza si el valor viene de fuera (ej. react-hook-form)
   React.useEffect(() => {
-    setDate(value);
+    setDate(value ?? new Date());
   }, [value]);
 
   const handleSelect = (selectedDate?: Date) => {
