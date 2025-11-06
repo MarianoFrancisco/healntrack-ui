@@ -120,6 +120,14 @@ const data = {
           title: "Listado de pacientes",
           url: "/patients",
         },
+        {
+          title: "Nueva consulta",
+          url: "/consultations/create",
+        },
+        {
+          title: "Historial de consultas",
+          url: "/consultations",
+        },
       ],
     },
     {
