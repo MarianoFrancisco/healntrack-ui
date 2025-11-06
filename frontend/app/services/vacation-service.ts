@@ -48,15 +48,7 @@ class VacationService {
     }
   }
 
-  async reviewVacation(vacationId: string, request: ReviewVacationRequestDTO): Promise<VacationResponseDTO> {
-    try {
-      return await apiClient.patch<VacationResponseDTO>(`${this.basePath}/${vacationId}/review`, request);
-    } catch (error) {
-      return this.handleError(error);
-    }
-  }
-
-  async getVacation(vacationId: string): Promise<VacationResponseDTO> {
+  async getVacationById(vacationId: string): Promise<VacationResponseDTO> {
     try {
       return await apiClient.get<VacationResponseDTO>(`${this.basePath}/${vacationId}`);
     } catch (error) {
@@ -64,9 +56,17 @@ class VacationService {
     }
   }
 
-  async cancelVacation(vacationId: string): Promise<void> {
+  async approveVacation(vacationId: string, request: ReviewVacationRequestDTO): Promise<void> {
     try {
-      await apiClient.delete(`${this.basePath}/${vacationId}`);
+      await apiClient.post<void>(`${this.basePath}/${vacationId}/approve`, request);
+    } catch (error) {
+      return this.handleError(error);
+    }
+  }
+
+  async rejectVacation(vacationId: string, request: ReviewVacationRequestDTO): Promise<void> {
+    try {
+      await apiClient.post<void>(`${this.basePath}/${vacationId}/reject`, request);
     } catch (error) {
       return this.handleError(error);
     }

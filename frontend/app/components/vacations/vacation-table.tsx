@@ -15,6 +15,7 @@ import type { VacationResponseDTO } from "~/types/vacation";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useNavigate } from "react-router";
 import { VacationStatusBadge } from "./vacation-status-badge";
+import { VacationDialog } from "./vacation-dialog";
 
 interface VacationTableProps {
     data: VacationResponseDTO[];
@@ -136,47 +137,18 @@ export function VacationTable({ data }: VacationTableProps) {
             header: "Acciones",
             cell: ({ row }) => {
                 const vacation = row.original;
-
-                const handleView = () => navigate(`/vacations/${vacation.id}`);
-                const handleApprove = () =>
-                    navigate(`/vacations/${vacation.id}/approve`);
-                const handleReject = () =>
-                    navigate(`/vacations/${vacation.id}/reject`);
-
-                const canApprove = vacation.status === "PENDIENTE" || vacation.status === "AUTOGENERADA";
-                const canReject = vacation.status === "PENDIENTE" || vacation.status === "AUTOGENERADA";
+                const canReview = vacation.status === "PENDIENTE" || vacation.status === "AUTOGENERADA";
 
                 return (
                     <div className="flex items-center gap-2">
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={handleView}
-                            className="flex items-center gap-1"
-                        >
-                            <Eye className="h-4 w-4" />
-                            Ver
-                        </Button>
-                        {canApprove && (
+                        <VacationDialog vacation={vacation}/>
+                        {canReview && (
                             <Button
-                                variant="secondary"
                                 size="sm"
-                                onClick={handleApprove}
-                                className="flex items-center gap-1 text-green-700 dark:text-green-400"
+                                onClick={() => navigate(`/vacations/${vacation.id}/review`)}
                             >
                                 <CheckCircle2 className="h-4 w-4" />
-                                Aprobar
-                            </Button>
-                        )}
-                        {canReject && (
-                            <Button
-                                variant="destructive"
-                                size="sm"
-                                onClick={handleReject}
-                                className="flex items-center gap-1"
-                            >
-                                <XCircle className="h-4 w-4" />
-                                Rechazar
+                                Revisar
                             </Button>
                         )}
                     </div>
