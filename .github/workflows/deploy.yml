@@ -12,7 +12,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set environment variables based on branch
+      - name: Set env vars from branch
         run: |
           if [ "${GITHUB_REF_NAME}" = "main" ]; then
             echo "HOST=${{ secrets.EC2_HOST_PROD }}" >> $GITHUB_ENV
@@ -26,14 +26,14 @@ jobs:
             echo "VITE_API_TIMEOUT=${{ secrets.VITE_API_TIMEOUT }}" >> $GITHUB_ENV
           fi
 
-      - name: Write SSH key - QA
+      - name: Write SSH key (QA)
         if: github.ref_name != 'main'
         run: |
           mkdir -p ~/.ssh
           printf '%s' '${{ secrets.EC2_SSH_KEY }}' > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
 
-      - name: Write SSH key - PROD
+      - name: Write SSH key (PROD)
         if: github.ref_name == 'main'
         run: |
           mkdir -p ~/.ssh
@@ -41,33 +41,37 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
 
       - name: Add host to known_hosts
-        run: |
-          ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts
+        run: ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts
 
       - name: Deploy to EC2 via SSH
         shell: bash
         env:
           GITHUB_REF_NAME: ${{ github.ref_name }}
         run: |
-          ssh "$SSH_USER@$HOST" << EOF
-            set -e
+          ssh "$SSH_USER@$HOST" << 'EOF'
+            set -euo pipefail
+
+            df -h || true
+            sudo docker system df || true
 
             cd ./healntrack-ui
-
             git fetch --all --prune
             git checkout "${GITHUB_REF_NAME}"
-            git pull
-
-            sudo docker build \
-              -f frontend/Dockerfile \
-              --build-arg VITE_API_BASE_URL="${VITE_API_BASE_URL}" \
-              --build-arg VITE_API_TIMEOUT="${VITE_API_TIMEOUT}" \
-              --build-arg OUT_DIR=build \
-              -t healntrack-ui:latest \
-              frontend
+            git pull --ff-only
 
             sudo docker stop healntrack-ui || true
             sudo docker rm healntrack-ui || true
+            sudo docker container prune -f || true
+            sudo docker image prune -af || true
+            sudo docker builder prune -af || true
+            sudo docker volume prune -f || true
+
+            DOCKER_BUILDKIT=1 sudo -E docker build \
+              -f frontend/Dockerfile \
+              --build-arg VITE_API_BASE_URL="${VITE_API_BASE_URL}" \
+              --build-arg VITE_API_TIMEOUT="${VITE_API_TIMEOUT}" \
+              -t healntrack-ui:latest \
+              frontend
 
             sudo docker run -d --name healntrack-ui \
               -p 80:3000 \

@@ -1,12 +1,16 @@
 FROM node:20-alpine AS build
 WORKDIR /app
+
 COPY package*.json ./
 RUN --mount=type=cache,target=/root/.npm npm ci
+
 COPY . .
+
 ARG VITE_API_BASE_URL
 ARG VITE_API_TIMEOUT
 ENV VITE_API_BASE_URL=$VITE_API_BASE_URL
 ENV VITE_API_TIMEOUT=$VITE_API_TIMEOUT
+
 RUN npm run build
 
 FROM node:20-alpine AS runner
