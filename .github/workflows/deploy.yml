@@ -48,7 +48,7 @@ jobs:
         env:
           GITHUB_REF_NAME: ${{ github.ref_name }}
         run: |
-          ssh "$SSH_USER@$HOST" << 'EOF'
+          ssh "$SSH_USER@$HOST" << EOF
             set -euo pipefail
 
             df -h || true
