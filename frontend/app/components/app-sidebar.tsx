@@ -10,6 +10,7 @@ import {
   Pill,
   SquareUser,
   Stethoscope,
+  Syringe,
   TreePalm,
   Users,
 } from "lucide-react"
@@ -183,6 +184,21 @@ const data = {
         {
           title: "Listado",
           url: "/hospitalizations",
+        },
+      ],
+    },
+    {
+      title: "Cirugías",
+      url: "/surgery-prices",
+      icon: Syringe,
+      items: [
+        {
+          title: "Nueva cirugía",
+          url: "/surgery-prices/create",
+        },
+        {
+          title: "Listado",
+          url: "/surgery-prices",
         },
       ],
     }
