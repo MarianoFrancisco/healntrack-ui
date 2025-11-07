@@ -1,4 +1,4 @@
-import { redirect, type LoaderFunctionArgs, type ActionFunctionArgs, useLoaderData, useNavigate, useSearchParams } from "react-router"
+import { redirect, type LoaderFunctionArgs, type ActionFunctionArgs, useLoaderData, useNavigate, useSearchParams, useActionData } from "react-router"
 import { employeeService } from "~/services/employment-service"
 import { patientService } from "~/services/patient-service"
 import { saleService } from "~/services/sale-service"
@@ -11,6 +11,8 @@ import { useCart } from "~/hooks/use-cart"
 import { MedicineSaleCartTable } from "~/components/medicine/medicine-sale-cart"
 import { CreateSaleForm } from "~/components/medicine/sale-form"
 import { CartDrawer } from "~/components/cart/cart"
+import { useEffect } from "react"
+import { toast } from "sonner"
 
 interface LoaderData {
   sellers: { sellerId: string; sellerName: string }[]
@@ -34,18 +36,24 @@ export async function loader({ request }: LoaderFunctionArgs) {
     isActiveParam === "true"
       ? true
       : isActiveParam === "false"
-      ? false
-      : undefined
+        ? false
+        : undefined
 
   const [employees, patients, hospitalizations, medicines] = await Promise.all([
     employeeService.getAllEmployees({ isActive: true }),
     patientService.getAllPatients({}),
-    buyerType !== "PATIENT" ? hospitalizationService.getAllHospitalizations({active: true}) : Promise.resolve([]),
+    buyerType !== "PATIENT" ? hospitalizationService.getAllHospitalizations({ active: true }) : Promise.resolve([]),
     medicineService.getAllMedicines({ searchTerm, isActive }),
   ])
 
   // Sellers
-  const sellerOptions = employees.map(e => ({
+  // Filtrar empleados por código
+  const filteredEmployees = employees.filter(e =>
+    e.department.code === "FAR-025" || e.department.code === "ENF-025"
+  )
+
+  // Sellers
+  const sellerOptions = filteredEmployees.map(e => ({
     sellerId: e.id,
     sellerName: e.fullname,
   }))
@@ -75,7 +83,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 // ------------------- ACTION -------------------
 export async function action({ request }: ActionFunctionArgs) {
-  console.log("Creating sale...************")
   const formData = await request.formData()
   const sellerId = formData.get("sellerId") as string
   const buyerId = formData.get("buyerId") as string
@@ -92,30 +99,51 @@ export async function action({ request }: ActionFunctionArgs) {
     })),
   }
 
-  console.log("Payload de venta:", payload)
-
   try {
     await saleService.createSale(payload)
-    return redirect("/sales")
+    // Mensaje de éxito para toast
+    return { success: "Venta creada correctamente" }
   } catch (error: any) {
     console.error("Error al crear venta:", error)
-    return { error: error.message || "Error al crear venta" }
+
+    // Extraer el mensaje del backend si existe
+    let message = "Error al crear venta"
+    if (error?.response?.detail) {
+      message = error.response.detail
+    } else if (error?.message) {
+      message = error.message
+    }
+
+    return { error: message }
   }
 }
 
 // ------------------- COMPONENT -------------------
 export default function CreateSalePage() {
-  const { sellers, buyers, buyerType, medicines, searchTerm, isActive } =
+  const { sellers, buyers, buyerType, medicines } =
     useLoaderData<typeof loader>()
+  const actionData = useActionData() as
+    | { error?: string; success?: string }
+    | undefined
+
   const { cart } = useCart()
-  const navigate = useNavigate()
-  const [params] = useSearchParams()
+
+  // Mostrar toast según el resultado del action
+useEffect(() => {
+  if (actionData?.error) {
+    toast.error(actionData.error)
+  }
+  if (actionData?.success) {
+    toast.success(actionData.success)
+  }
+}, [actionData])
+
 
   return (
     <section className="p-6 flex flex-col gap-6">
       <h1 className="text-2xl font-bold">Crear venta</h1>
 
-<CartDrawer />
+      <CartDrawer />
       {/* Formulario de filtros de medicina */}
       <MedicineFilter buyerType={buyerType} />
 
