@@ -6,6 +6,7 @@ import type { SaleSeller } from "~/types/sale"
 import type { Route } from "../+types"
 import { SaleFilter } from "~/components/medicine/sale-filter"
 import { SaleTable } from "~/components/medicine/sale-table"
+import type { EmployeeResponseDTO } from "~/types/employee"
 
 export function meta() {
   return [
@@ -39,8 +40,8 @@ export async function loader({ request }: Route.LoaderArgs) {
   ])
 
   // Simplificar empleados para el filtro
-  const sellersForFilter: { sellerId: string; sellerName: string }[] = employees.map((e: SaleSeller) => ({
-    sellerId: e.fullname, // si quieres id real, usa e.id
+  const sellersForFilter: { sellerId: string; sellerName: string }[] = employees.map((e: EmployeeResponseDTO) => ({
+    sellerId: e.id,
     sellerName: e.fullname,
   }))
 

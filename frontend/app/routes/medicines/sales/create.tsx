@@ -75,6 +75,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 // ------------------- ACTION -------------------
 export async function action({ request }: ActionFunctionArgs) {
+  console.log("Creating sale...")
   const formData = await request.formData()
 
   const sellerId = formData.get("sellerId") as string
