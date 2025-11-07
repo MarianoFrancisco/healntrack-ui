@@ -75,9 +75,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 // ------------------- ACTION -------------------
 export async function action({ request }: ActionFunctionArgs) {
-  console.log("Creating sale...")
+  console.log("Creating sale...************")
   const formData = await request.formData()
-
   const sellerId = formData.get("sellerId") as string
   const buyerId = formData.get("buyerId") as string
   const buyerType = formData.get("buyerType") as string
@@ -92,6 +91,8 @@ export async function action({ request }: ActionFunctionArgs) {
       quantity: i.quantity,
     })),
   }
+
+  console.log("Payload de venta:", payload)
 
   try {
     await saleService.createSale(payload)

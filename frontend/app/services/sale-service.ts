@@ -20,8 +20,11 @@ class SaleService {
 
   async createSale(request: CreateSaleDTO): Promise<SaleResponseDTO> {
     try {
-      return await apiClient.post<SaleResponseDTO>(this.basePath, request);
+      const response = await apiClient.post<SaleResponseDTO>(this.basePath, request);
+      console.log("Sale created successfully:", response);
+      return response;
     } catch (error) {
+      console.log("Error creating sale:", error);
       return this.handleError(error);
     }
   }

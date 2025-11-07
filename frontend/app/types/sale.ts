@@ -1,10 +1,8 @@
 import type { MedicineStatus } from "./medicine";
 
 export interface CreateSaleItemDTO {
-    medicineId: string;
+    medicineCode: string;
     quantity: number;
-    unitPrice: number;
-    unitCost?: number;
 }
 
 export interface CreateSaleDTO {
