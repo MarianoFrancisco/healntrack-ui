@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import {
+  Banknote,
   Bed,
   BookOpen,
   BriefcaseBusiness,
@@ -154,6 +155,17 @@ const data = {
         {
           title: "Lotes de medicamentos",
           url: "/medicines/batches",
+        },
+      ],
+    },
+    {
+      title: "Ventas Farmacia",
+      url: "/sales",
+      icon: Banknote,
+      items: [
+        {
+          title: "Nueva venta",
+          url: "/sales/type",
         },
       ],
     },

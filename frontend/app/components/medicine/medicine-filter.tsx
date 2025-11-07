@@ -11,7 +11,11 @@ import {
   SelectValue,
 } from "~/components/ui/select";
 
-export function MedicineFilter() {
+interface MedicineFilterProps {
+  buyerType?: string;
+}
+
+export function MedicineFilter({buyerType}: MedicineFilterProps) {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
@@ -20,6 +24,8 @@ export function MedicineFilter() {
       method="get"
       className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-4 border rounded-lg bg-card shadow-sm items-end"
     >
+            {/* Input hidden opcional */}
+      {buyerType && <input type="hidden" name="buyerType" value={buyerType} />}
       {/* Buscar medicamento */}
       <div className="grid gap-1">
         <Label htmlFor="searchTerm">Medicamento</Label>
@@ -58,13 +64,15 @@ export function MedicineFilter() {
           <Search className="h-4 w-4" />
           Buscar
         </Button>
-        <Button
-          type="reset"
-          variant="outline"
-          onClick={() => navigate("/medicines")}
-        >
-          Limpiar
-        </Button>
+  {!buyerType && (
+    <Button
+      type="reset"
+      variant="outline"
+      onClick={() => navigate("/medicines")}
+    >
+      Limpiar
+    </Button>
+  )}
       </div>
     </Form>
   );

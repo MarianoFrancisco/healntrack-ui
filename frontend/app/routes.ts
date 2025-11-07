@@ -55,6 +55,12 @@ export default [
             route(":code/batches", "routes/medicines/batches/create.tsx"),
         ]),
 
+        ...prefix("sales", [
+            // index("routes/sales/index.tsx"),
+            route("type", "routes/medicines/sales/type.tsx"),
+            route("create", "routes/medicines/sales/create.tsx"),
+        ]),
+
         ...prefix("rooms", [
             index("routes/hospitalization/room/index.tsx"),
             route("create", "routes/hospitalization/room/create.tsx"),
