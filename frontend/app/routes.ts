@@ -78,5 +78,10 @@ export default [
             route("create", "routes/hospitalization/surgery-prices/create.tsx"),
             route(":id/edit", "routes/hospitalization/surgery-prices/edit.tsx"),
         ]),
+
+        ...prefix("reports", [
+            route("transactions", "routes/reports/transactions.tsx"),
+            route("profits", "routes/reports/profits.tsx"),
+        ]),
     ]),
 ] satisfies RouteConfig;

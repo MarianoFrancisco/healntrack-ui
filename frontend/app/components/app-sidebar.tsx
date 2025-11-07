@@ -6,6 +6,7 @@ import {
   Bed,
   BookOpen,
   BriefcaseBusiness,
+  ChartArea,
   Hospital,
   Info,
   Pill,
@@ -211,6 +212,21 @@ const data = {
         {
           title: "Listado",
           url: "/surgery-prices",
+        },
+      ],
+    },
+        {
+      title: "Reportes",
+      url: "#",
+      icon: ChartArea,
+      items: [
+        {
+          title: "Transacciones",
+          url: "/reports/transactions",
+        },
+        {
+          title: "Ganancias",
+          url: "/reports/profits",
         },
       ],
     }
