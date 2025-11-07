@@ -1,10 +1,7 @@
-// app/components/medicine/medicine-sale-cart.tsx
 "use client";
 
-import { useMemo } from "react";
 import { ArrowUpDown, Plus, Minus, Hash, Package, Activity, Layers, DollarSign } from "lucide-react";
 import { Button } from "~/components/ui/button";
-import { Input } from "~/components/ui/input";
 import { DataTable } from "../common/data-table";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { MedicineResponseDTO } from "~/types/medicine";
@@ -18,13 +15,7 @@ interface MedicineSaleCartTableProps {
 }
 
 export function MedicineSaleCartTable({ data }: MedicineSaleCartTableProps) {
-  const { cart, addItem, decrementItem, updateQuantity } = useCart();
-
-  const qtyByCode = useMemo(() => {
-    const map = new Map<string, number>();
-    for (const it of cart) map.set(it.medicineCode, it.quantity);
-    return map;
-  }, [cart]);
+  const { addItem, decrementItem, getItemQuantity } = useCart();
 
   const columns: ColumnDef<MedicineResponseDTO>[] = [
     {
@@ -103,64 +94,44 @@ export function MedicineSaleCartTable({ data }: MedicineSaleCartTableProps) {
         const m = row.original;
         const isActive = m.status === "ACTIVE";
         const stock = m.stock ?? 0;
-        const qty = qtyByCode.get(m.code) ?? 0;
-        const canAdd = isActive && stock > 0 && qty < stock;
+        const qty = getItemQuantity(m.code);
         const canDec = qty > 0;
-
-        const handleAdd = () => {
-          if (qty >= stock) {
-            toast.error("No hay suficiente stock");
-            return;
-          }
-          addItem({
-            medicineCode: m.code,
-            medicineName: m.name,
-            quantity: 1,
-            unitCost: m.currentPrice,
-          });
-        };
-
-        const handleDec = () => {
-          if (!canDec) return;
-          // Si baja a 0, el hook lo removerá
-          decrementItem(m.code, 1);
-        };
-
-        const handleDirectChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-          const raw = e.target.value.replace(/\D+/g, "");
-          const val = raw === "" ? 0 : Math.max(0, Math.min(Number(raw), stock));
-          if (val > stock) {
-            toast.error("La cantidad supera el stock disponible");
-            return;
-          }
-          if (val === 0) {
-            // elimina si estaba en el carrito
-            if (qty > 0) decrementItem(m.code, qty);
-            return;
-          }
-          if (qty === 0) {
-            addItem({ medicineCode: m.code, medicineName: m.name, quantity: val, unitCost: m.currentPrice });
-            return;
-          }
-          updateQuantity(m.code, val);
-        };
+        const canInc = isActive && stock > 0 && qty < stock;
 
         return (
           <div className="flex items-center gap-2">
-            <Button size="icon" variant="outline" onClick={handleDec} disabled={!canDec}>
+            <Button
+              size="icon"
+              variant="outline"
+              disabled={!canDec}
+              onClick={() => decrementItem(m.code, 1)}
+              aria-label="Disminuir"
+            >
               <Minus className="h-4 w-4" />
             </Button>
-            <Input
-              className="w-16 text-center"
-              inputMode="numeric"
-              pattern="\d*"
-              value={qty}
-              onChange={handleDirectChange}
-            />
-            <Button size="icon" variant="secondary" onClick={handleAdd} disabled={!canAdd}>
+
+            <div className="min-w-[72px] text-center tabular-nums">{qty} / {stock}</div>
+
+            <Button
+              size="icon"
+              variant="secondary"
+              disabled={!canInc}
+              onClick={() => {
+                if (!canInc) {
+                  toast.error("No hay stock suficiente");
+                  return;
+                }
+                addItem({
+                  medicineCode: m.code,
+                  medicineName: m.name,
+                  quantity: 1,
+                  unitCost: m.currentPrice,
+                });
+              }}
+              aria-label="Aumentar"
+            >
               <Plus className="h-4 w-4" />
             </Button>
-            <span className="text-xs text-muted-foreground">/ {stock}</span>
           </div>
         );
       },
