@@ -44,9 +44,6 @@ export interface UpdateMedicineRequest {
 }
 
 export interface FindMedicinesRequest {
-  q?: string;
-  status?: MedicineStatus;
-  unitType?: UnitType;
-  page?: number;
-  size?: number;
+  searchTerm?: string;
+  isActive?: boolean;
 }

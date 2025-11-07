@@ -144,6 +144,10 @@ const data = {
           title: "Nuevo medicamento",
           url: "/medicines/create",
         },
+        {
+          title: "Catálogo de medicamentos",
+          url: "/medicines",
+        },
       ],
     }
   ],

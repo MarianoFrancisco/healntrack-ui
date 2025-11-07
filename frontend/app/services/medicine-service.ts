@@ -69,11 +69,8 @@ class MedicineService {
     try {
       const queryParams = new URLSearchParams();
 
-      if (params?.q) queryParams.append("searchTerm", params.q);
-      if (params?.status) queryParams.append("status", params.status);
-      if (params?.unitType) queryParams.append("unitType", params.unitType);
-      if (params?.page) queryParams.append("page", params.page.toString());
-      if (params?.size) queryParams.append("size", params.size.toString());
+      if (params?.searchTerm) queryParams.append("searchTerm", params.searchTerm);
+      if (params?.isActive !== undefined) queryParams.append("isActive", String(params.isActive));
 
       const queryString = queryParams.toString();
       const endpoint = queryString ? `${this.basePath}?${queryString}` : this.basePath;
