@@ -45,6 +45,14 @@ class SurgeryPriceService {
       return this.handleError(error);
     }
   }
+
+  async getById(id: string): Promise<SurgeryPriceResponseDTO> {
+    try {
+      return await apiClient.get<SurgeryPriceResponseDTO>(`${this.basePath}/${id}`);
+    } catch (error) {
+      return this.handleError(error);
+    }
+  }
 }
 
 export const surgeryPriceService = new SurgeryPriceService();
