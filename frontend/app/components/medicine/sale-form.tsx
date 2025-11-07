@@ -10,12 +10,12 @@ interface CreateSaleFormProps {
   sellers: { sellerId: string; sellerName: string }[];
   buyers: { buyerId: string; buyerName: string }[];
   buyerType: "HOSPITALIZATION" | "PATIENT";
-  redirectTo?: string; // <<--- permite configurar redirección
+  redirectTo?: string;
 }
 
 export function CreateSaleForm({ sellers, buyers, buyerType, redirectTo = "/sales" }: CreateSaleFormProps) {
   const fetcher = useFetcher();
-  const navigate = useNavigate(); // <<--- acá!
+  const navigate = useNavigate();
   const { cart, clearCart, total } = useCart();
 
   const sellerOptions: ComboboxOption[] = useMemo(
@@ -46,7 +46,6 @@ export function CreateSaleForm({ sellers, buyers, buyerType, redirectTo = "/sale
       clearCart();
       setErrorMessage(null);
 
-      // ✅ Redirigir después de éxito
       navigate(redirectTo);
     }
   }, [fetcher.state, fetcher.data, clearCart, navigate, redirectTo]);
