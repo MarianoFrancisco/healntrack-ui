@@ -41,7 +41,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 
   // Simplificar empleados para el filtro
   const sellersForFilter: { sellerId: string; sellerName: string }[] = employees.map((e: EmployeeResponseDTO) => ({
-    sellerId: e.fullname, // si quieres id real, usa e.id
+    sellerId: e.id, // si quieres id real, usa e.id
     sellerName: e.fullname,
   }))
 

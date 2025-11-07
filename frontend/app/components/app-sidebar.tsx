@@ -168,6 +168,10 @@ const data = {
           title: "Nueva venta",
           url: "/sales/type",
         },
+        {
+          title: "Historial de ventas",
+          url: "/sales",
+        },
       ],
     },
     {

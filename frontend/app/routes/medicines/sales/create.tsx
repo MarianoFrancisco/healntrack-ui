@@ -57,6 +57,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     sellerId: e.id,
     sellerName: e.fullname,
   }))
+  console.log(sellerOptions)
 
   // Buyers
   let buyerOptions: { buyerId: string; buyerName: string }[]

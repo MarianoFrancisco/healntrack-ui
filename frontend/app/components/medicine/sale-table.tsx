@@ -14,6 +14,7 @@ import type { ColumnDef } from "@tanstack/react-table"
 import type { SaleResponseDTO } from "~/types/sale"
 import { StatusBadge } from "../common/status-badge"
 import { SaleDialog } from "./sale-item-dialog"
+import { SaleBadgeStatus } from "./sale-badge-status"
 
 interface SaleTableProps {
   data: SaleResponseDTO[]
@@ -107,7 +108,7 @@ export function SaleTable({ data }: SaleTableProps) {
           <ArrowUpDown className="ml-1 h-4 w-4" />
         </Button>
       ),
-      cell: ({ getValue }) => <StatusBadge status={getValue() === "COMPLETED"} />,
+      cell: ({ getValue }) => <SaleBadgeStatus status={getValue() !== "COMPLETED"} />,
     },
     {
       accessorKey: "total",
