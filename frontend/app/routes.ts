@@ -45,5 +45,11 @@ export default [
             route("create", "routes/consultations/create.tsx"),
 
         ]),
+
+        ...prefix("medicines", [
+            // index("routes/medicines/index.tsx"),
+            route("create", "routes/medicines/create.tsx"),
+            // route(":id/edit", "routes/medicines/edit.tsx"),
+        ]),
     ]),
 ] satisfies RouteConfig;

@@ -136,25 +136,13 @@ const data = {
       ],
     },
     {
-      title: "Farmacia",
-      url: "#",
+      title: "Medicamentos",
+      url: "/medicines",
       icon: Pill,
       items: [
         {
-          title: "Introduction",
-          url: "#",
-        },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
+          title: "Nuevo medicamento",
+          url: "/medicines/create",
         },
       ],
     }
