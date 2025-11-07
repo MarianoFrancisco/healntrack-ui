@@ -1,4 +1,4 @@
-import { ArrowUpDown, DollarSign, Layers } from "lucide-react";
+import { ArrowUpDown, Banknote, DollarSign, Layers } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { DataTable } from "../common/data-table";
 import type { ColumnDef } from "@tanstack/react-table";
@@ -72,12 +72,15 @@ export function ProfitTable({ data }: ProfitTableProps) {
           }
           className="flex items-center gap-2 font-semibold"
         >
-          <DollarSign className="h-4 w-4" />
+          <Banknote className="h-4 w-4" />
           Monto
           <ArrowUpDown className="ml-1 h-4 w-4" />
         </Button>
       ),
-      cell: (info) => `$${(info.getValue() as number).toFixed(2)}`,
+      cell: (info) => `${(info.getValue() as number).toLocaleString("es-GT", {
+          style: "currency",
+          currency: "GTQ",
+        })}`,
     },
   ];
 
