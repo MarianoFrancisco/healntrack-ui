@@ -1,3 +1,4 @@
+// app/hooks/use-cart.ts
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
@@ -29,8 +30,7 @@ export function useCart() {
         try {
           const items = e.newValue ? (JSON.parse(e.newValue) as CartItem[]) : [];
           setCart(items);
-        } catch {
-        }
+        } catch {}
       }
     }
     function handleCustom(e: Event) {
@@ -61,15 +61,11 @@ export function useCart() {
   const addItem = useCallback(
     (item: Omit<CartItem, "subtotal">) => {
       const existing = cart.find((i) => i.medicineCode === item.medicineCode);
-
       if (existing) {
+        const newQty = existing.quantity + item.quantity;
         const updated = cart.map((i) =>
           i.medicineCode === item.medicineCode
-            ? {
-                ...i,
-                quantity: i.quantity + item.quantity,
-                subtotal: (i.quantity + item.quantity) * i.unitCost,
-              }
+            ? { ...i, quantity: newQty, subtotal: newQty * i.unitCost }
             : i
         );
         saveCart(updated);
@@ -83,6 +79,40 @@ export function useCart() {
     [cart, saveCart]
   );
 
+  const decrementItem = useCallback(
+    (code: string, amount: number = 1) => {
+      const target = cart.find((i) => i.medicineCode === code);
+      if (!target) return;
+      const nextQty = target.quantity - amount;
+      if (nextQty > 0) {
+        const next = cart.map((i) =>
+          i.medicineCode === code ? { ...i, quantity: nextQty, subtotal: nextQty * i.unitCost } : i
+        );
+        saveCart(next);
+        toast.info(`Quitaste ${amount} unidad(es) del carrito`);
+      } else {
+        const next = cart.filter((i) => i.medicineCode !== code);
+        saveCart(next);
+        toast.warning("Producto removido del carrito");
+      }
+    },
+    [cart, saveCart]
+  );
+
+  const adjustQuantity = useCallback(
+    (code: string, delta: number) => {
+      if (delta === 0) return;
+      if (delta > 0) {
+        const item = cart.find((i) => i.medicineCode === code);
+        if (!item) return;
+        addItem({ ...item, quantity: delta });
+      } else {
+        decrementItem(code, Math.abs(delta));
+      }
+    },
+    [cart, addItem, decrementItem]
+  );
+
   const removeItem = useCallback(
     (code: string) => {
       const next = cart.filter((i) => i.medicineCode !== code);
@@ -94,6 +124,12 @@ export function useCart() {
 
   const updateQuantity = useCallback(
     (code: string, quantity: number) => {
+      if (quantity <= 0) {
+        const next = cart.filter((i) => i.medicineCode !== code);
+        saveCart(next);
+        toast.warning("Producto removido del carrito");
+        return;
+      }
       const next = cart.map((i) =>
         i.medicineCode === code ? { ...i, quantity, subtotal: quantity * i.unitCost } : i
       );
@@ -110,5 +146,5 @@ export function useCart() {
 
   const total = cart.reduce((sum, i) => sum + i.subtotal, 0);
 
-  return { cart, addItem, removeItem, updateQuantity, clearCart, total };
+  return { cart, addItem, decrementItem, adjustQuantity, removeItem, updateQuantity, clearCart, total };
 }
