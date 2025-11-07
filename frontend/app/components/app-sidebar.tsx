@@ -219,6 +219,7 @@ const data = {
       title: "Reportes",
       url: "#",
       icon: ChartArea,
+      isActive: true,
       items: [
         {
           title: "Transacciones",
