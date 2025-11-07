@@ -50,6 +50,14 @@ class RoomService {
       return this.handleError(error);
     }
   }
+  
+  async getRoomById(id: string): Promise<RoomResponseDTO> {
+    try {
+      return await apiClient.get<RoomResponseDTO>(`${this.basePath}/${id}`);
+    } catch (error) {
+      return this.handleError(error);
+    }
+  }
 }
 
 export const roomService = new RoomService();

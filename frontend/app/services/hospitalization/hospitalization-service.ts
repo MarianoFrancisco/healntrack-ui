@@ -69,7 +69,7 @@ class HospitalizationService {
 
   async getAllHospitalizations(
     params?: SearchHospitalizationsRequest
-  ): Promise<HospitalizationResponseComplete[]> {
+  ): Promise<HospitalizationResponse[]> {
     try {
       const queryParams = new URLSearchParams();
       if (params?.patientId) queryParams.append("patientId", params.patientId);
@@ -79,42 +79,7 @@ class HospitalizationService {
       const queryString = queryParams.toString();
       const endpoint = queryString ? `${this.basePath}?${queryString}` : this.basePath;
 
-      const hospitalizations = await apiClient.get<HospitalizationResponse[]>(endpoint);
-
-      const [patients, rooms, employees] = await Promise.all([
-        patientService.getAllPatients(),
-        roomService.getAllRooms(),
-        employeeService.getAllEmployees(),
-      ]);
-
-      const completeList: HospitalizationResponseComplete[] = hospitalizations.map(
-        (h) => {
-          const patient = patients.find((p) => p.id === h.patientId)!;
-          const room = rooms.find((r) => r.id === h.roomId)!;
-
-          const staffAssignment: StaffAssignmentResponseComplete[] =
-            h.staffAssignment.map((s: StaffAssignmentResponse) => {
-              const employee = employees.find((e) => e.id === s.employeeId)!;
-              return {
-                id: s.id,
-                employee,
-                assignedAt: s.assignedAt,
-              };
-            });
-
-          return {
-            id: h.id,
-            patient,
-            room,
-            admissionDate: h.admissionDate,
-            dischargeDate: h.dischargeDate,
-            totalFee: h.totalFee,
-            staffAssignment,
-          };
-        }
-      );
-
-      return completeList;
+      return await apiClient.get<HospitalizationResponse[]>(endpoint);
     } catch (error) {
       return this.handleError(error);
     }
@@ -124,15 +89,11 @@ class HospitalizationService {
     try {
       const h = await apiClient.get<HospitalizationResponse>(`${this.basePath}/${id}`);
 
-    //   const [patient, room, employees] = await Promise.all([
-        const [patient, employees] = await Promise.all([
-        patientService.getPatient(h.patientId),
-        // roomService.getRoom(h.roomId),
-        employeeService.getAllEmployees(),
-      ]);
-    //   TEMPORAL NERY SAPO
-      const room = {id: h.roomId, number: "N/A", status: "OCCUPIED" as RoomStatus, costPerDay: 0, maintenanceCost: 0}; // Placeholder until roomService is fixed
-
+      const [patient, room, employees] = await Promise.all([
+          patientService.getPatient(h.patientId),
+          roomService.getRoomById(h.roomId),
+          employeeService.getAllEmployees(),
+        ]);
       const staffAssignment: StaffAssignmentResponseComplete[] = h.staffAssignment.map(
         (s: StaffAssignmentResponse) => {
           const employee = employees.find((e) => e.id === s.employeeId)!;

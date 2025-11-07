@@ -5,6 +5,7 @@ import {
   Bed,
   BookOpen,
   BriefcaseBusiness,
+  Hospital,
   Info,
   Pill,
   SquareUser,
@@ -167,6 +168,21 @@ const data = {
         {
           title: "Listado",
           url: "/rooms",
+        },
+      ],
+    },
+    {
+      title: "Hospitalizaciones",
+      url: "/hospitalizations",
+      icon: Hospital,
+      items: [
+        {
+          title: "Nueva hospitalización",
+          url: "/hospitalizations/create",
+        },
+        {
+          title: "Listado",
+          url: "/hospitalizations",
         },
       ],
     }

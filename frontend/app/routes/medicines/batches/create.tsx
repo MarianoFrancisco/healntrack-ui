@@ -34,7 +34,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 
     const [medicine, employees] = await Promise.all([
       medicineService.getMedicineByCode(code),
-      employeeService.getAllEmployees({ isActive: true, department: "ENF-025" }),
+      employeeService.getAllEmployees({ isActive: true, department: "FAR-025" }),
     ]);
 
     const employeeOptions: ComboboxOption[] = employees.map((e) => ({
