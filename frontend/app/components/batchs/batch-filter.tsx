@@ -33,7 +33,7 @@ export function BatchFilter() {
 
       {/* Solo con stock */}
       <div className="grid gap-1">
-        <Label htmlFor="onlyWithStock">Con stock</Label>
+        <Label htmlFor="onlyWithStock">Stock</Label>
         <Select
           name="onlyWithStock"
           defaultValue={searchParams.get("onlyWithStock") ?? "all"}
@@ -51,7 +51,7 @@ export function BatchFilter() {
 
       {/* Solo no expirados */}
       <div className="grid gap-1">
-        <Label htmlFor="onlyNotExpired">No expirados</Label>
+        <Label htmlFor="onlyNotExpired">Estado</Label>
         <Select
           name="onlyNotExpired"
           defaultValue={searchParams.get("onlyNotExpired") ?? "all"}
@@ -61,7 +61,7 @@ export function BatchFilter() {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Todos</SelectItem>
-            <SelectItem value="true">Solo no expirados</SelectItem>
+            <SelectItem value="true">Vigentes</SelectItem>
             <SelectItem value="false">Expirados</SelectItem>
           </SelectContent>
         </Select>
