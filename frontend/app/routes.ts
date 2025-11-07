@@ -56,7 +56,7 @@ export default [
         ]),
 
         ...prefix("sales", [
-            // index("routes/sales/index.tsx"),
+            index("routes/medicines/sales/index.tsx"),
             route("type", "routes/medicines/sales/type.tsx"),
             route("create", "routes/medicines/sales/create.tsx"),
         ]),
