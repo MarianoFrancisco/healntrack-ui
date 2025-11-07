@@ -56,7 +56,9 @@ export function BatchTable({ data }: BatchTableProps) {
         </Button>
       ),
       cell: ({ getValue }) => {
-        const date = new Date(getValue() as string);
+        const dateString = getValue() as string;
+        const [year, month, day] = dateString.split('-');
+        const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
         return date.toLocaleDateString("es-GT");
       },
     },
