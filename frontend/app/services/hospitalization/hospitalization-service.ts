@@ -87,6 +87,7 @@ class HospitalizationService {
 
   async getHospitalizationById(id: string): Promise<HospitalizationResponseComplete> {
     try {
+      console.log("Fetching hospitalization by ID:", id);
       const h = await apiClient.get<HospitalizationResponse>(`${this.basePath}/${id}`);
 
       const [patient, room, employees] = await Promise.all([

@@ -188,9 +188,9 @@ export function HospitalizationTable({ data }: HospitalizationTableProps) {
               <Button
                 size="sm"
                 variant="outline"
-                onClick={() =>
-                  navigate(`/hospitalizations/${hospitalization.id}`)
-                }
+                // onClick={() =>
+                //   navigate(`/hospitalizations/${hospitalization.id}`)
+                // }
               >
                 <Eye className="h-4 w-4" />
                 Ver detalles

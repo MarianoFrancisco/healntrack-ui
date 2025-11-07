@@ -64,8 +64,8 @@ export default [
         ...prefix("hospitalizations", [
             index("routes/hospitalization/index.tsx"),
             route("create", "routes/hospitalization/create.tsx"),
-            // route(":id/discharge", "routes/hospitalization/discharge.tsx"),
-            // route(":id/manage-staff", "routes/hospitalization/manage-staff.tsx"),
+            route(":id/discharge", "routes/hospitalization/discharge.tsx"),
+            route(":id/staff", "routes/hospitalization/staff.tsx"),
         ]),
     ]),
 ] satisfies RouteConfig;
