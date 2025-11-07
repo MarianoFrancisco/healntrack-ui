@@ -1,9 +1,10 @@
-import { ArrowUpDown, CalendarDays, Package, User, Barcode } from "lucide-react";
+import { ArrowUpDown, CalendarDays, Package, User, Barcode, Timer } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { DataTable } from "../common/data-table";
 import type { BatchResponseDTO } from "~/types/batch";
 import type { ColumnDef } from "@tanstack/react-table";
 import { BatchDialog } from "./batch-dialog";
+import { BatchExpirationDateBadge } from "./batch-expiration-badge";
 
 interface BatchTableProps {
   data: BatchResponseDTO[];
@@ -60,7 +61,19 @@ export function BatchTable({ data }: BatchTableProps) {
       },
     },
     {
-      accessorKey: "purchasedQuantity",
+      id: "expirationStatus",
+      header: () => (
+        <div className="flex items-center gap-2 font-semibold">
+          <Timer className="h-4 w-4" />
+          Estado
+        </div>
+      ),
+      cell: ({ row }) => (
+        <BatchExpirationDateBadge expirationDate={row.original.expirationDate} />
+      ),
+    },
+    {
+      accessorKey: "quantityOnHand",
       header: ({ column }) => (
         <Button
           variant="ghost"
@@ -68,7 +81,7 @@ export function BatchTable({ data }: BatchTableProps) {
           className="flex items-center gap-2 font-semibold"
         >
           <Package className="h-4 w-4" />
-          Cantidad Comprada
+          Cantidad en Stock
           <ArrowUpDown className="ml-1 h-4 w-4" />
         </Button>
       ),
