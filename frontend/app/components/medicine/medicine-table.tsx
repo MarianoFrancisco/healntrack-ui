@@ -10,6 +10,7 @@ import {
   BadgeDollarSign,
   Layers,
   Activity,
+  PlusCircle,
 } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { DataTable } from "../common/data-table";
@@ -132,8 +133,8 @@ export function MedicineTable({ data }: MedicineTableProps) {
       ),
       cell: (info) => info.getValue(),
     },
-    {
-      accessorKey: "currentPrice",
+        {
+      accessorKey: "stock",
       header: ({ column }) => (
         <Button
           variant="ghost"
@@ -142,29 +143,12 @@ export function MedicineTable({ data }: MedicineTableProps) {
           }
           className="flex items-center gap-2 font-semibold"
         >
-          <DollarSign className="h-4 w-4" />
-          Precio
+          <Layers className="h-4 w-4" />
+          Stock
           <ArrowUpDown className="ml-1 h-4 w-4" />
         </Button>
       ),
-      cell: (info) => `Q${(info.getValue() as number).toFixed(2)}`,
-    },
-    {
-      accessorKey: "currentCost",
-      header: ({ column }) => (
-        <Button
-          variant="ghost"
-          onClick={() =>
-            column.toggleSorting(column.getIsSorted() === "asc")
-          }
-          className="flex items-center gap-2 font-semibold"
-        >
-          <BadgeDollarSign className="h-4 w-4" />
-          Costo
-          <ArrowUpDown className="ml-1 h-4 w-4" />
-        </Button>
-      ),
-      cell: (info) => `Q${(info.getValue() as number).toFixed(2)}`,
+      cell: (info) => info.getValue(),
     },
     {
       id: "actions",
@@ -184,6 +168,14 @@ export function MedicineTable({ data }: MedicineTableProps) {
               <Pencil className="h-4 w-4" />
               Editar
             </Button>
+            <Button
+          size="sm"
+          variant="outline"
+          onClick={() => navigate(`/medicines/${medicine.code}/batches`)}
+        >
+          <PlusCircle className="h-4 w-4" />
+          Agregar lote
+        </Button>
             <Button
               size="sm"
               variant={isActive ? "destructive" : "default"}

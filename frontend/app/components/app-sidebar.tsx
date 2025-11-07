@@ -148,6 +148,10 @@ const data = {
           title: "Catálogo de medicamentos",
           url: "/medicines",
         },
+        {
+          title: "Lotes de medicamentos",
+          url: "/medicines/batches",
+        },
       ],
     }
   ],
